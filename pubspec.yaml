@@ -1,0 +1,28 @@
+name: liquid_glass_bridge
+description: Platform-adaptive liquid glass surface for Flutter (iOS-native look + Flutter-rendered fallback).
+version: 0.1.0
+homepage: https://github.com/DrRaspec/liquid_glass_bridge
+repository: https://github.com/DrRaspec/liquid_glass_bridge
+
+environment:
+  sdk: ^3.10.0
+  flutter: ">=3.24.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  plugin:
+    platforms:
+      ios:
+        pluginClass: LiquidGlassBridgePlugin
+  assets:
+    - assets/noise_64.png
+  shaders:
+    - shaders/liquid_lens.frag
