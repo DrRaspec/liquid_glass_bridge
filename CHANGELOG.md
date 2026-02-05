@@ -1,3 +1,8 @@
+## 0.1.1
+
+- Republished with package metadata updates (GitHub homepage/repository).
+- Added native iOS UIKit rendering path integration for glass effect.
+
 ## 0.1.0
 
 - Initial release of `liquid_glass_bridge`.

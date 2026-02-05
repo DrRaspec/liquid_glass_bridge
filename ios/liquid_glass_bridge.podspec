@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'liquid_glass_bridge'
-  s.version          = '0.1.0'
+  s.version          = '0.1.1'
   s.summary          = 'Platform-adaptive liquid glass widgets for Flutter.'
   s.description      = <<-DESC
 A Flutter package that renders liquid-glass UI. On iOS it can use a native UIKit visual effect view.
