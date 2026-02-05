@@ -1,3 +1,8 @@
+## 0.1.2
+
+- Added Dartdoc comments across public API for improved documentation quality.
+- Expanded README with install, modes, API parameters, and usage examples.
+
 ## 0.1.1
 
 - Republished with package metadata updates (GitHub homepage/repository).

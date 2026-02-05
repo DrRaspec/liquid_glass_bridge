@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'enums.dart';
 import 'liquid_glass_surface.dart';
 
+/// iOS-inspired glass button built on top of [LiquidGlassSurface].
 class LiquidGlassButton extends StatelessWidget {
+  /// Creates a liquid-glass button.
   const LiquidGlassButton({
     super.key,
     required this.onPressed,

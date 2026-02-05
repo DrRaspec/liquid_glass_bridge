@@ -7,7 +7,9 @@ import 'package:flutter/material.dart';
 import 'android_glass.dart';
 import 'enums.dart';
 
+/// Shader-based lens renderer with automatic fallback to Flutter glass.
 class LensShaderSurface extends StatefulWidget {
+  /// Creates the lens shader renderer.
   const LensShaderSurface({
     super.key,
     required this.child,
@@ -43,6 +45,7 @@ class LensShaderSurface extends StatefulWidget {
   final bool enabled;
   final String? debugLabel;
 
+  /// Returns true when lens mode should fallback to standard glass.
   static bool shouldFallbackToGlass({
     required bool shaderSupported,
     required bool shaderLoaded,

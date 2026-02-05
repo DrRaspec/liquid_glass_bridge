@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'enums.dart';
 import 'liquid_glass_surface.dart';
 
+/// Data model for one item inside [LiquidGlassBottomNavigationBar].
 class LiquidGlassNavItem {
+  /// Creates a navigation item.
   const LiquidGlassNavItem({
     required this.icon,
     required this.label,
@@ -15,7 +17,9 @@ class LiquidGlassNavItem {
   final IconData? activeIcon;
 }
 
+/// iOS-like bottom tab bar rendered with liquid-glass styling.
 class LiquidGlassBottomNavigationBar extends StatelessWidget {
+  /// Creates a liquid-glass bottom navigation bar.
   const LiquidGlassBottomNavigationBar({
     super.key,
     required this.items,

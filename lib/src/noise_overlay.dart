@@ -3,13 +3,16 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+/// Subtle tiled-noise overlay used to enhance glass realism.
 class NoiseOverlay extends StatefulWidget {
+  /// Creates a noise overlay.
   const NoiseOverlay({
     super.key,
     required this.opacity,
     required this.borderRadius,
   });
 
+  /// Bundled noise asset path.
   static const String assetPath =
       'packages/liquid_glass_bridge/assets/noise_64.png';
 

@@ -6,7 +6,12 @@ import 'enums.dart';
 import 'ios_native_glass.dart';
 import 'lens_shader_surface.dart';
 
+/// Base liquid-glass container with a platform-adaptive rendering backend.
+///
+/// Use this widget when you want one shared API across iOS/Android/web/desktop.
+/// The selected backend is controlled by [mode].
 class LiquidGlassSurface extends StatelessWidget {
+  /// Creates a liquid-glass surface.
   const LiquidGlassSurface({
     super.key,
     required this.child,
@@ -44,6 +49,7 @@ class LiquidGlassSurface extends StatelessWidget {
   final bool enabled;
   final String? debugLabel;
 
+  /// Resolves the concrete renderer from [mode] and [platform].
   static LiquidGlassImplementation resolveImplementation({
     required LiquidGlassMode mode,
     required TargetPlatform platform,

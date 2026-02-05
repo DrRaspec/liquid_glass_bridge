@@ -1,16 +1,36 @@
+/// Rendering mode selector for [LiquidGlassSurface] and companion widgets.
 enum LiquidGlassMode {
+  /// Chooses the best implementation for the current platform.
+  ///
+  /// - iOS: native UIKit visual effect view
+  /// - Other platforms: Flutter glass rendering
   auto,
+
+  /// Forces iOS-native rendering on iOS, fallback to Flutter glass elsewhere.
   iosNative,
+
+  /// Forces the Flutter glass implementation on all platforms.
   flutterGlass,
+
+  /// Forces the shader lens implementation when available.
+  ///
+  /// Automatically falls back to Flutter glass if unsupported.
   flutterLens,
 }
 
+/// Quality profile used to tune blur/noise/highlight intensity.
 enum LiquidGlassQuality {
+  /// Lower visual cost, better for long lists and low-end devices.
   low,
+
+  /// Balanced quality and performance.
   medium,
+
+  /// Stronger visual effect at higher rendering cost.
   high,
 }
 
+/// Internal concrete implementation selected from [LiquidGlassMode].
 enum LiquidGlassImplementation {
   iosNative,
   flutterGlass,

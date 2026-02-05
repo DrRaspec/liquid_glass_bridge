@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'enums.dart';
 import 'liquid_glass_surface.dart';
 
+/// iOS-style top navigation bar rendered with liquid-glass styling.
 class LiquidGlassNavigationBar extends StatelessWidget
     implements PreferredSizeWidget {
+  /// Creates a liquid-glass navigation bar.
   const LiquidGlassNavigationBar({
     super.key,
     required this.title,

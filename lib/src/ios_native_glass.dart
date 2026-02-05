@@ -5,7 +5,9 @@ import 'package:flutter/widgets.dart';
 import 'android_glass.dart';
 import 'enums.dart';
 
+/// iOS renderer that uses a native UIKit platform view when available.
 class IosNativeGlassSurface extends StatelessWidget {
+  /// Creates the iOS-native renderer.
   const IosNativeGlassSurface({
     super.key,
     required this.child,

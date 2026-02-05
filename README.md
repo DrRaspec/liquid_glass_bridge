@@ -1,42 +1,78 @@
 # liquid_glass_bridge
 
-A cross-platform Flutter package that exposes one API for liquid-glass surfaces and iOS-style controls.
+A cross-platform Flutter package that gives you one API for liquid-glass UI.
 
-- **iOS**: uses a native UIKit `UIVisualEffectView` (Swift) for system frosted material.
-- **Android/Web/Desktop**: renders a matching glass look in pure Flutter (`BackdropFilter` + tint + border + specular highlight + optional noise).
-- **Optional lens mode**: tries a fragment-shader overlay and automatically falls back to standard glass if unavailable.
+- **iOS**: native Swift/UIKit renderer (`UIVisualEffectView`) for system-like frosted material.
+- **Android/Web/Desktop**: Flutter renderer (`BackdropFilter` + tint + border + highlight + optional noise).
+- **Lens mode**: shader overlay with automatic fallback.
 
-## Included widgets
+## Install
+
+```bash
+flutter pub add liquid_glass_bridge
+```
+
+## Included Widgets
 
 - `LiquidGlassSurface`
 - `LiquidGlassButton`
 - `LiquidGlassNavigationBar`
 - `LiquidGlassBottomNavigationBar`
 
-All widgets support `mode` and `quality` so the app code stays identical across iOS and Android.
+## Modes and Quality
 
-## iOS Native Rendering
+### `LiquidGlassMode`
 
-On iOS, `LiquidGlassMode.auto` / `iosNative` now uses a platform view backed by Swift + UIKit:
+- `auto`: iOS -> native UIKit, others -> Flutter glass
+- `iosNative`: iOS native, others fallback to Flutter glass
+- `flutterGlass`: force Flutter glass everywhere
+- `flutterLens`: force lens shader (falls back to glass when unavailable)
 
-- `UIVisualEffectView` blur material
-- Native tint + border + highlight composition
-- Flutter `child` is layered on top, so your Dart layout stays unchanged
+### `LiquidGlassQuality`
 
-## Features
+- `low`: better performance
+- `medium`: balanced (default)
+- `high`: stronger effect, higher cost
 
-- Single rendering engine with platform-adaptive mode selection
-- Modes: `auto`, `iosNative`, `flutterGlass`, `flutterLens`
-- Quality tiers: `low`, `medium`, `high`
-- Tunable blur/tint/border/highlight/noise/elevation
-- Graceful fallback when shader support is missing
+## Main Surface API
+
+`LiquidGlassSurface` parameters:
+
+- `child`
+- `borderRadius`
+- `padding`, `margin`
+- `elevation`
+- `tintColor`, `tintOpacity`
+- `blurSigma`
+- `borderColor`, `borderWidth`
+- `highlightStrength`
+- `noiseOpacity`
+- `mode`
+- `quality`
+- `enabled`
+- `debugLabel`
 
 ## Usage
 
+### Surface
+
+```dart
+LiquidGlassSurface(
+  mode: LiquidGlassMode.auto,
+  quality: LiquidGlassQuality.medium,
+  borderRadius: BorderRadius.circular(24),
+  blurSigma: 18,
+  noiseOpacity: 0.05,
+  child: const Text('Liquid glass'),
+)
+```
+
+### Button + Navigation
+
 ```dart
 Scaffold(
-  appBar: LiquidGlassNavigationBar(
-    title: const Text('Home'),
+  appBar: const LiquidGlassNavigationBar(
+    title: Text('Home'),
   ),
   bottomNavigationBar: LiquidGlassBottomNavigationBar(
     items: const <LiquidGlassNavItem>[
@@ -55,29 +91,35 @@ Scaffold(
 )
 ```
 
-## Performance Tips (especially Android)
+## iOS Native Rendering Notes
 
-- Keep `blurSigma` as low as acceptable (start around 12–18).
-- Use `LiquidGlassQuality.low` for large scrolling lists.
-- Keep `noiseOpacity` subtle (`0.02`–`0.06`) and avoid very large glass surfaces.
-- Prefer fewer overlapping blurred layers.
+On iOS, `auto` and `iosNative` use a platform view backed by Swift/UIKit:
 
-## Screenshots
+- native blur material (`UIVisualEffectView`)
+- native tint/border/highlight composition
+- Flutter `child` content remains in Dart above the native layer
 
-- `docs/screenshots/ios.png` (placeholder)
-- `docs/screenshots/android.png` (placeholder)
-- `docs/screenshots/lens.png` (placeholder)
+## Performance Tips (Android/Flutter renderer)
 
-## Example
+- Keep `blurSigma` moderate (`12-18` is a good start).
+- Use `LiquidGlassQuality.low` for long scrolling lists.
+- Keep `noiseOpacity` subtle (`0.02-0.06`).
+- Avoid many overlapping large blurred surfaces.
 
-Run:
+## Example App
+
+Run from package root:
 
 ```bash
 flutter run -d <device> -t example/lib/main.dart
 ```
 
-or from `/example`:
+or from `example/`:
 
 ```bash
 flutter run
 ```
+
+## License
+
+MIT

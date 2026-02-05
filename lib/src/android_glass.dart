@@ -10,7 +10,9 @@ Color _applyOpacity(Color color, double opacity) {
   return color.withAlpha(alpha);
 }
 
+/// Flutter-only glass renderer used on Android and non-iOS platforms.
 class AndroidGlassSurface extends StatelessWidget {
+  /// Creates the Flutter glass renderer.
   const AndroidGlassSurface({
     super.key,
     required this.child,
