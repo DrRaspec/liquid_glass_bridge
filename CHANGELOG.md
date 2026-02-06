@@ -1,3 +1,7 @@
+## 0.2.1
+
+- Fix Android native view hit-testing by wrapping the platform view with `IgnorePointer`.
+
 ## 0.2.0
 
 - Added Android native blur backend and `LiquidGlassMode.androidNative`.
