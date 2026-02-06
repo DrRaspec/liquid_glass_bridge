@@ -1,7 +1,3 @@
-## 0.2.1
-
-- Fix Android native view hit-testing by wrapping the platform view with `IgnorePointer`.
-
 ## 0.2.0
 
 - Added Android native blur backend and `LiquidGlassMode.androidNative`.
@@ -9,6 +5,7 @@
 - Added reusable `LiquidGlassStyle`, platform overrides, presets, and lerp/merge helpers.
 - Added iOS native blur style override via `iosBlurStyle`.
 - Improved Flutter renderer: proper `enabled` handling, noise caching, and lens animation gating.
+- Fix Android native view hit-testing by wrapping the platform view with `IgnorePointer`.
 - Documentation updates for styles, theming, and native backends.
 
 ## 0.1.2
