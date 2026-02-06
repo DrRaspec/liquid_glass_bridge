@@ -82,16 +82,17 @@ class AndroidNativeGlassSurface extends StatelessWidget {
         fit: StackFit.expand,
         children: <Widget>[
           if (effectiveBlur > 0)
-            AndroidView(
-              key: ValueKey<String>(viewKey),
-              viewType: _nativeViewType,
-              hitTestBehavior: PlatformViewHitTestBehavior.transparent,
-              creationParams: <String, dynamic>{
-                'enabled': enabled,
-                'blurSigma': effectiveBlur,
-                'borderRadius': cornerRadius,
-              },
-              creationParamsCodec: const StandardMessageCodec(),
+            IgnorePointer(
+              child: AndroidView(
+                key: ValueKey<String>(viewKey),
+                viewType: _nativeViewType,
+                creationParams: <String, dynamic>{
+                  'enabled': enabled,
+                  'blurSigma': effectiveBlur,
+                  'borderRadius': cornerRadius,
+                },
+                creationParamsCodec: const StandardMessageCodec(),
+              ),
             ),
           DecoratedBox(
             decoration: BoxDecoration(
