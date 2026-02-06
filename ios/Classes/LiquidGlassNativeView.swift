@@ -79,12 +79,16 @@ final class LiquidGlassNativeView: NSObject, FlutterPlatformView {
     let borderWidth = CGFloat(doubleArg(args, "borderWidth", defaultValue: 1.0))
     let tintOpacity = CGFloat(doubleArg(args, "tintOpacity", defaultValue: 0.2))
     let elevation = CGFloat(doubleArg(args, "elevation", defaultValue: 6.0))
-    let highlightStrength = CGFloat(doubleArg(args, "highlightStrength", defaultValue: 0.35))
+    let rawHighlightStrength = CGFloat(doubleArg(args, "highlightStrength", defaultValue: 0.35))
+    let highlightStrength = enabled ? rawHighlightStrength : 0.0
 
     let tintColor = colorFromARGB(intArg(args, "tintColor", defaultValue: 0xFFFFFFFF))
     let borderColor = colorFromARGB(intArg(args, "borderColor", defaultValue: 0x99FFFFFF))
 
-    let blurStyle = blurStyleFromQuality(stringArg(args, "quality", defaultValue: "medium"))
+    let blurStyleName = stringArg(args, "iosBlurStyle", defaultValue: "")
+    let blurStyle = blurStyleName.isEmpty
+      ? blurStyleFromQuality(stringArg(args, "quality", defaultValue: "medium"))
+      : blurStyleFromName(blurStyleName)
     effectView.effect = enabled ? UIBlurEffect(style: blurStyle) : nil
 
     glassView.layer.cornerRadius = borderRadius
@@ -114,6 +118,21 @@ final class LiquidGlassNativeView: NSObject, FlutterPlatformView {
       return .systemThinMaterial
     case "high":
       return .systemThickMaterial
+    default:
+      return .systemMaterial
+    }
+  }
+
+  private func blurStyleFromName(_ style: String) -> UIBlurEffect.Style {
+    switch style {
+    case "systemUltraThinMaterial":
+      return .systemUltraThinMaterial
+    case "systemThinMaterial":
+      return .systemThinMaterial
+    case "systemThickMaterial":
+      return .systemThickMaterial
+    case "systemChromeMaterial":
+      return .systemChromeMaterial
     default:
       return .systemMaterial
     }

@@ -1,7 +1,10 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'enums.dart';
 import 'liquid_glass_surface.dart';
+import 'liquid_glass_theme.dart';
+import 'liquid_glass_style.dart';
 
 /// Data model for one item inside [LiquidGlassBottomNavigationBar].
 class LiquidGlassNavItem {
@@ -42,6 +45,9 @@ class LiquidGlassBottomNavigationBar extends StatelessWidget {
     this.noiseOpacity = 0.05,
     this.activeColor,
     this.inactiveColor,
+    this.iosBlurStyle,
+    this.style,
+    this.platformStyle,
   }) : assert(items.length >= 2, 'Bottom navigation needs at least 2 items.'),
        assert(
          currentIndex >= 0 && currentIndex < items.length,
@@ -68,29 +74,69 @@ class LiquidGlassBottomNavigationBar extends StatelessWidget {
   final double noiseOpacity;
   final Color? activeColor;
   final Color? inactiveColor;
+  final LiquidGlassIosBlurStyle? iosBlurStyle;
+  final LiquidGlassStyle? style;
+  final LiquidGlassPlatformStyle? platformStyle;
 
   @override
   Widget build(BuildContext context) {
+    final LiquidGlassThemeData? theme = LiquidGlassTheme.maybeOf(context);
+    final LiquidGlassStyle? themeStyle = theme?.style;
+    final LiquidGlassPlatformStyle? themePlatformStyle = theme?.platformStyle;
+    final LiquidGlassStyle? effectiveStyle = style ?? themeStyle;
+    final LiquidGlassPlatformStyle? effectivePlatformStyle =
+        platformStyle ?? themePlatformStyle;
     final ColorScheme scheme = Theme.of(context).colorScheme;
     final Color resolvedActive = activeColor ?? scheme.primary;
     final Color resolvedInactive =
         inactiveColor ?? scheme.onSurface.withValues(alpha: 0.7);
+    final bool useStyle =
+        effectiveStyle != null || effectivePlatformStyle != null;
+    final LiquidGlassStyle resolvedStyle = useStyle
+        ? resolveLiquidGlassStyle(
+            fallback: LiquidGlassDefaults.bottomNavigationBar,
+            style: effectiveStyle,
+            platformStyle: effectivePlatformStyle,
+            platform: defaultTargetPlatform,
+            isWeb: kIsWeb,
+          )
+        : LiquidGlassStyle(
+            borderRadius: borderRadius,
+            elevation: elevation,
+            tintColor: tintColor,
+            tintOpacity: tintOpacity,
+            blurSigma: blurSigma,
+            borderColor: borderColor,
+            borderWidth: borderWidth,
+            highlightStrength: highlightStrength,
+            noiseOpacity: noiseOpacity,
+            iosBlurStyle: iosBlurStyle,
+          );
+    final LiquidGlassMode resolvedMode =
+        (theme?.mode != null && mode == LiquidGlassMode.auto)
+            ? theme!.mode!
+            : mode;
+    final LiquidGlassQuality resolvedQuality =
+        (theme?.quality != null && quality == LiquidGlassQuality.medium)
+            ? theme!.quality!
+            : quality;
 
     return LiquidGlassSurface(
-      mode: mode,
-      quality: quality,
+      mode: resolvedMode,
+      quality: resolvedQuality,
       enabled: enabled,
       margin: margin,
       padding: padding,
-      borderRadius: borderRadius,
-      elevation: elevation,
-      tintColor: tintColor,
-      tintOpacity: tintOpacity,
-      blurSigma: blurSigma,
-      borderColor: borderColor,
-      borderWidth: borderWidth,
-      highlightStrength: highlightStrength,
-      noiseOpacity: noiseOpacity,
+      borderRadius: resolvedStyle.borderRadius,
+      elevation: resolvedStyle.elevation,
+      tintColor: resolvedStyle.tintColor,
+      tintOpacity: resolvedStyle.tintOpacity,
+      blurSigma: resolvedStyle.blurSigma,
+      borderColor: resolvedStyle.borderColor,
+      borderWidth: resolvedStyle.borderWidth,
+      highlightStrength: resolvedStyle.highlightStrength,
+      noiseOpacity: resolvedStyle.noiseOpacity,
+      iosBlurStyle: resolvedStyle.iosBlurStyle,
       child: SizedBox(
         height: height,
         child: Row(

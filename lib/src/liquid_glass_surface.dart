@@ -2,9 +2,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'android_glass.dart';
+import 'android_native_glass.dart';
 import 'enums.dart';
 import 'ios_native_glass.dart';
 import 'lens_shader_surface.dart';
+import 'liquid_glass_theme.dart';
+import 'liquid_glass_style.dart';
 
 /// Base liquid-glass container with a platform-adaptive rendering backend.
 ///
@@ -29,6 +32,9 @@ class LiquidGlassSurface extends StatelessWidget {
     this.mode = LiquidGlassMode.auto,
     this.quality = LiquidGlassQuality.medium,
     this.enabled = true,
+    this.iosBlurStyle,
+    this.style,
+    this.platformStyle,
     this.debugLabel,
   });
 
@@ -47,6 +53,9 @@ class LiquidGlassSurface extends StatelessWidget {
   final LiquidGlassMode mode;
   final LiquidGlassQuality quality;
   final bool enabled;
+  final LiquidGlassIosBlurStyle? iosBlurStyle;
+  final LiquidGlassStyle? style;
+  final LiquidGlassPlatformStyle? platformStyle;
   final String? debugLabel;
 
   /// Resolves the concrete renderer from [mode] and [platform].
@@ -56,12 +65,20 @@ class LiquidGlassSurface extends StatelessWidget {
   }) {
     switch (mode) {
       case LiquidGlassMode.auto:
-        return platform == TargetPlatform.iOS
-            ? LiquidGlassImplementation.iosNative
-            : LiquidGlassImplementation.flutterGlass;
+        if (platform == TargetPlatform.iOS) {
+          return LiquidGlassImplementation.iosNative;
+        }
+        if (platform == TargetPlatform.android) {
+          return LiquidGlassImplementation.androidNative;
+        }
+        return LiquidGlassImplementation.flutterGlass;
       case LiquidGlassMode.iosNative:
         return platform == TargetPlatform.iOS
             ? LiquidGlassImplementation.iosNative
+            : LiquidGlassImplementation.flutterGlass;
+      case LiquidGlassMode.androidNative:
+        return platform == TargetPlatform.android
+            ? LiquidGlassImplementation.androidNative
             : LiquidGlassImplementation.flutterGlass;
       case LiquidGlassMode.flutterGlass:
         return LiquidGlassImplementation.flutterGlass;
@@ -72,62 +89,119 @@ class LiquidGlassSurface extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final LiquidGlassThemeData? theme = LiquidGlassTheme.maybeOf(context);
+    final LiquidGlassStyle? themeStyle = theme?.style;
+    final LiquidGlassPlatformStyle? themePlatformStyle = theme?.platformStyle;
+    final LiquidGlassStyle? effectiveStyle = style ?? themeStyle;
+    final LiquidGlassPlatformStyle? effectivePlatformStyle =
+        platformStyle ?? themePlatformStyle;
+    final bool useStyle =
+        effectiveStyle != null || effectivePlatformStyle != null;
+    final LiquidGlassStyle resolvedStyle = useStyle
+        ? resolveLiquidGlassStyle(
+            fallback: LiquidGlassDefaults.surface,
+            style: effectiveStyle,
+            platformStyle: effectivePlatformStyle,
+            platform: defaultTargetPlatform,
+            isWeb: kIsWeb,
+          )
+        : LiquidGlassStyle(
+            borderRadius: borderRadius,
+            elevation: elevation,
+            tintColor: tintColor,
+            tintOpacity: tintOpacity,
+            blurSigma: blurSigma,
+            borderColor: borderColor,
+            borderWidth: borderWidth,
+            highlightStrength: highlightStrength,
+            noiseOpacity: noiseOpacity,
+            iosBlurStyle: iosBlurStyle,
+          );
+
+    final LiquidGlassMode resolvedMode =
+        (theme?.mode != null && mode == LiquidGlassMode.auto)
+            ? theme!.mode!
+            : mode;
+    final LiquidGlassQuality resolvedQuality =
+        (theme?.quality != null && quality == LiquidGlassQuality.medium)
+            ? theme!.quality!
+            : quality;
+
     final LiquidGlassImplementation implementation = resolveImplementation(
-      mode: mode,
+      mode: resolvedMode,
       platform: defaultTargetPlatform,
     );
 
     switch (implementation) {
       case LiquidGlassImplementation.iosNative:
         return IosNativeGlassSurface(
-          borderRadius: borderRadius,
+          borderRadius: resolvedStyle.borderRadius,
           padding: padding,
           margin: margin,
-          elevation: elevation,
-          tintColor: tintColor,
-          tintOpacity: tintOpacity,
-          blurSigma: blurSigma,
-          borderColor: borderColor,
-          borderWidth: borderWidth,
-          highlightStrength: highlightStrength,
-          noiseOpacity: noiseOpacity,
-          quality: quality,
+          elevation: resolvedStyle.elevation,
+          tintColor: resolvedStyle.tintColor,
+          tintOpacity: resolvedStyle.tintOpacity,
+          blurSigma: resolvedStyle.blurSigma,
+          borderColor: resolvedStyle.borderColor,
+          borderWidth: resolvedStyle.borderWidth,
+          highlightStrength: resolvedStyle.highlightStrength,
+          noiseOpacity: resolvedStyle.noiseOpacity,
+          quality: resolvedQuality,
+          enabled: enabled,
+          iosBlurStyle: resolvedStyle.iosBlurStyle,
+          debugLabel: debugLabel,
+          child: child,
+        );
+      case LiquidGlassImplementation.androidNative:
+        return AndroidNativeGlassSurface(
+          borderRadius: resolvedStyle.borderRadius,
+          padding: padding,
+          margin: margin,
+          elevation: resolvedStyle.elevation,
+          tintColor: resolvedStyle.tintColor,
+          tintOpacity: resolvedStyle.tintOpacity,
+          blurSigma: resolvedStyle.blurSigma,
+          borderColor: resolvedStyle.borderColor,
+          borderWidth: resolvedStyle.borderWidth,
+          highlightStrength: resolvedStyle.highlightStrength,
+          noiseOpacity: resolvedStyle.noiseOpacity,
+          quality: resolvedQuality,
           enabled: enabled,
           debugLabel: debugLabel,
           child: child,
         );
       case LiquidGlassImplementation.flutterGlass:
         return AndroidGlassSurface(
-          borderRadius: borderRadius,
+          borderRadius: resolvedStyle.borderRadius,
           padding: padding,
           margin: margin,
-          elevation: elevation,
-          tintColor: tintColor,
-          tintOpacity: tintOpacity,
-          blurSigma: blurSigma,
-          borderColor: borderColor,
-          borderWidth: borderWidth,
-          highlightStrength: highlightStrength,
-          noiseOpacity: noiseOpacity,
-          quality: quality,
+          elevation: resolvedStyle.elevation,
+          tintColor: resolvedStyle.tintColor,
+          tintOpacity: resolvedStyle.tintOpacity,
+          blurSigma: resolvedStyle.blurSigma,
+          borderColor: resolvedStyle.borderColor,
+          borderWidth: resolvedStyle.borderWidth,
+          highlightStrength: resolvedStyle.highlightStrength,
+          noiseOpacity: resolvedStyle.noiseOpacity,
+          quality: resolvedQuality,
           enabled: enabled,
           debugLabel: debugLabel,
           child: child,
         );
       case LiquidGlassImplementation.flutterLens:
         return LensShaderSurface(
-          borderRadius: borderRadius,
+          borderRadius: resolvedStyle.borderRadius,
           padding: padding,
           margin: margin,
-          elevation: elevation,
-          tintColor: tintColor,
-          tintOpacity: tintOpacity,
-          blurSigma: blurSigma,
-          borderColor: borderColor,
-          borderWidth: borderWidth,
-          highlightStrength: highlightStrength,
-          noiseOpacity: noiseOpacity,
-          quality: quality,
+          elevation: resolvedStyle.elevation,
+          tintColor: resolvedStyle.tintColor,
+          tintOpacity: resolvedStyle.tintOpacity,
+          blurSigma: resolvedStyle.blurSigma,
+          borderColor: resolvedStyle.borderColor,
+          borderWidth: resolvedStyle.borderWidth,
+          highlightStrength: resolvedStyle.highlightStrength,
+          noiseOpacity: resolvedStyle.noiseOpacity,
+          quality: resolvedQuality,
           enabled: enabled,
           debugLabel: debugLabel,
           child: child,

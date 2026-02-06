@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 
 import 'android_glass.dart';
 import 'enums.dart';
+import 'liquid_glass_style.dart';
 
 /// iOS renderer that uses a native UIKit platform view when available.
 class IosNativeGlassSurface extends StatelessWidget {
@@ -24,6 +25,7 @@ class IosNativeGlassSurface extends StatelessWidget {
     required this.noiseOpacity,
     required this.quality,
     required this.enabled,
+    this.iosBlurStyle,
     this.debugLabel,
   });
 
@@ -43,6 +45,7 @@ class IosNativeGlassSurface extends StatelessWidget {
   final double noiseOpacity;
   final LiquidGlassQuality quality;
   final bool enabled;
+  final LiquidGlassIosBlurStyle? iosBlurStyle;
   final String? debugLabel;
 
   @override
@@ -69,6 +72,24 @@ class IosNativeGlassSurface extends StatelessWidget {
 
     final double cornerRadius = borderRadius.topLeft.x;
 
+    final Map<String, dynamic> params = <String, dynamic>{
+      'enabled': enabled,
+      'quality': quality.name,
+      'borderRadius': cornerRadius,
+      'elevation': elevation,
+      'tintColor': tintColor.toARGB32(),
+      'tintOpacity': tintOpacity,
+      'blurSigma': blurSigma,
+      'borderColor': borderColor.toARGB32(),
+      'borderWidth': borderWidth,
+      'highlightStrength': highlightStrength,
+      'noiseOpacity': noiseOpacity,
+    };
+
+    if (iosBlurStyle != null) {
+      params['iosBlurStyle'] = iosBlurStyle!.name;
+    }
+
     return RepaintBoundary(
       child: Container(
         margin: margin,
@@ -82,19 +103,7 @@ class IosNativeGlassSurface extends StatelessWidget {
                 UiKitView(
                   viewType: _nativeViewType,
                   layoutDirection: Directionality.of(context),
-                  creationParams: <String, dynamic>{
-                    'enabled': enabled,
-                    'quality': quality.name,
-                    'borderRadius': cornerRadius,
-                    'elevation': elevation,
-                    'tintColor': tintColor.toARGB32(),
-                    'tintOpacity': tintOpacity,
-                    'blurSigma': blurSigma,
-                    'borderColor': borderColor.toARGB32(),
-                    'borderWidth': borderWidth,
-                    'highlightStrength': highlightStrength,
-                    'noiseOpacity': noiseOpacity,
-                  },
+                  creationParams: params,
                   creationParamsCodec: const StandardMessageCodec(),
                 ),
                 Padding(

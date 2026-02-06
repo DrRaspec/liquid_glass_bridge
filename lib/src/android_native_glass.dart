@@ -1,15 +1,15 @@
-import 'dart:ui';
-
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
+import 'android_glass.dart';
 import 'enums.dart';
 import 'glass_effects.dart';
 import 'noise_overlay.dart';
 
-/// Flutter-only glass renderer used on Android and non-iOS platforms.
-class AndroidGlassSurface extends StatelessWidget {
-  /// Creates the Flutter glass renderer.
-  const AndroidGlassSurface({
+/// Android-native blur renderer backed by a platform view.
+class AndroidNativeGlassSurface extends StatelessWidget {
+  const AndroidNativeGlassSurface({
     super.key,
     required this.child,
     required this.borderRadius,
@@ -27,6 +27,8 @@ class AndroidGlassSurface extends StatelessWidget {
     required this.enabled,
     this.debugLabel,
   });
+
+  static const String _nativeViewType = 'liquid_glass_bridge/native_glass_view';
 
   final Widget child;
   final BorderRadius borderRadius;
@@ -46,24 +48,50 @@ class AndroidGlassSurface extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double effectiveBlur = (enabled ? blurSigma : 0) * quality.blurMultiplier;
-    final double effectiveNoise =
-        (enabled ? noiseOpacity : 0) * quality.noiseMultiplier;
-    final double effectiveHighlight =
-        (enabled ? highlightStrength : 0) * quality.highlightMultiplier;
+    if (kIsWeb || defaultTargetPlatform != TargetPlatform.android || !enabled) {
+      return AndroidGlassSurface(
+        borderRadius: borderRadius,
+        padding: padding,
+        margin: margin,
+        elevation: elevation,
+        tintColor: tintColor,
+        tintOpacity: tintOpacity,
+        blurSigma: blurSigma,
+        borderColor: borderColor,
+        borderWidth: borderWidth,
+        highlightStrength: highlightStrength,
+        noiseOpacity: noiseOpacity,
+        quality: quality,
+        enabled: enabled,
+        debugLabel: debugLabel,
+        child: child,
+      );
+    }
+
+    final double effectiveBlur = blurSigma * quality.blurMultiplier;
+    final double effectiveNoise = noiseOpacity * quality.noiseMultiplier;
+    final double effectiveHighlight = highlightStrength * quality.highlightMultiplier;
+    final double cornerRadius = borderRadius.topLeft.x;
+
+    final String viewKey = '${effectiveBlur.toStringAsFixed(2)}_'
+        '${cornerRadius.toStringAsFixed(2)}_${enabled ? 1 : 0}';
 
     final Widget core = ClipRRect(
       borderRadius: borderRadius,
       child: Stack(
         fit: StackFit.expand,
         children: <Widget>[
-          if (enabled && effectiveBlur > 0)
-            BackdropFilter(
-              filter: ImageFilter.blur(
-                sigmaX: effectiveBlur,
-                sigmaY: effectiveBlur,
-              ),
-              child: const SizedBox.expand(),
+          if (effectiveBlur > 0)
+            AndroidView(
+              key: ValueKey<String>(viewKey),
+              viewType: _nativeViewType,
+              hitTestBehavior: PlatformViewHitTestBehavior.transparent,
+              creationParams: <String, dynamic>{
+                'enabled': enabled,
+                'blurSigma': effectiveBlur,
+                'borderRadius': cornerRadius,
+              },
+              creationParamsCodec: const StandardMessageCodec(),
             ),
           DecoratedBox(
             decoration: BoxDecoration(
@@ -87,7 +115,7 @@ class AndroidGlassSurface extends StatelessWidget {
                   borderRadius: borderRadius,
                   strength: effectiveHighlight,
                 ),
-                if (enabled && effectiveNoise > 0)
+                if (effectiveNoise > 0)
                   NoiseOverlay(
                     opacity: effectiveNoise.clamp(0.0, 1.0).toDouble(),
                     borderRadius: borderRadius,

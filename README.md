@@ -23,8 +23,9 @@ flutter pub add liquid_glass_bridge
 
 ### `LiquidGlassMode`
 
-- `auto`: iOS -> native UIKit, others -> Flutter glass
+- `auto`: iOS -> native UIKit, Android -> native blur view, others -> Flutter glass
 - `iosNative`: iOS native, others fallback to Flutter glass
+- `androidNative`: Android native blur, others fallback to Flutter glass
 - `flutterGlass`: force Flutter glass everywhere
 - `flutterLens`: force lens shader (falls back to glass when unavailable)
 
@@ -47,6 +48,8 @@ flutter pub add liquid_glass_bridge
 - `borderColor`, `borderWidth`
 - `highlightStrength`
 - `noiseOpacity`
+- `iosBlurStyle`
+- `style`, `platformStyle`
 - `mode`
 - `quality`
 - `enabled`
@@ -64,6 +67,56 @@ LiquidGlassSurface(
   blurSigma: 18,
   noiseOpacity: 0.05,
   child: const Text('Liquid glass'),
+)
+```
+
+## Styles and Presets
+
+Use `LiquidGlassStyle` for reusable visual settings. When `style` or
+`platformStyle` is provided, those values override the per-parameter defaults.
+
+```dart
+final LiquidGlassStyle style = LiquidGlassPresets.frosted;
+
+LiquidGlassSurface(
+  style: style,
+  child: const Text('Reusable style'),
+)
+```
+
+## Theming
+
+You can set app-wide defaults with `LiquidGlassTheme`. When a theme is present,
+widgets will prefer its `style/platformStyle` and default `mode/quality`.
+Per-widget overrides should use `style` or `platformStyle`.
+
+```dart
+LiquidGlassTheme(
+  data: LiquidGlassThemeData(
+    style: LiquidGlassPresets.frosted,
+    mode: LiquidGlassMode.auto,
+    quality: LiquidGlassQuality.medium,
+  ),
+  child: MaterialApp(
+    home: const ExampleScreen(),
+  ),
+)
+```
+
+Platform-specific overrides:
+
+```dart
+final LiquidGlassPlatformStyle platformStyle = LiquidGlassPlatformStyle(
+  fallback: LiquidGlassPresets.frosted,
+  ios: LiquidGlassPresets.thin.copyWith(
+    iosBlurStyle: LiquidGlassIosBlurStyle.systemThinMaterial,
+  ),
+  android: LiquidGlassPresets.dense.copyWith(blurSigma: 22),
+);
+
+LiquidGlassSurface(
+  platformStyle: platformStyle,
+  child: const Text('Per-platform glass'),
 )
 ```
 
@@ -98,6 +151,13 @@ On iOS, `auto` and `iosNative` use a platform view backed by Swift/UIKit:
 - native blur material (`UIVisualEffectView`)
 - native tint/border/highlight composition
 - Flutter `child` content remains in Dart above the native layer
+- `blurSigma` is ignored for native iOS; use `iosBlurStyle` instead
+
+On Android, `auto` and `androidNative` use a platform view backed by a native
+blur view. If you need to force the Flutter renderer, set `mode` to
+`flutterGlass`.
+
+> Note: Android native blur uses the `BlurView` library under the hood.
 
 ## Performance Tips (Android/Flutter renderer)
 

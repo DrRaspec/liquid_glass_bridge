@@ -3,11 +3,15 @@ enum LiquidGlassMode {
   /// Chooses the best implementation for the current platform.
   ///
   /// - iOS: native UIKit visual effect view
+  /// - Android: native blur platform view
   /// - Other platforms: Flutter glass rendering
   auto,
 
   /// Forces iOS-native rendering on iOS, fallback to Flutter glass elsewhere.
   iosNative,
+
+  /// Forces Android-native rendering on Android, fallback to Flutter glass elsewhere.
+  androidNative,
 
   /// Forces the Flutter glass implementation on all platforms.
   flutterGlass,
@@ -33,6 +37,7 @@ enum LiquidGlassQuality {
 /// Internal concrete implementation selected from [LiquidGlassMode].
 enum LiquidGlassImplementation {
   iosNative,
+  androidNative,
   flutterGlass,
   flutterLens,
 }

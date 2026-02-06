@@ -1,3 +1,12 @@
+## 0.2.0
+
+- Added Android native blur backend and `LiquidGlassMode.androidNative`.
+- Added app-wide `LiquidGlassTheme` defaults.
+- Added reusable `LiquidGlassStyle`, platform overrides, presets, and lerp/merge helpers.
+- Added iOS native blur style override via `iosBlurStyle`.
+- Improved Flutter renderer: proper `enabled` handling, noise caching, and lens animation gating.
+- Documentation updates for styles, theming, and native backends.
+
 ## 0.1.2
 
 - Added Dartdoc comments across public API for improved documentation quality.

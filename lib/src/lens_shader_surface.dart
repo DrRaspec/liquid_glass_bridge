@@ -73,8 +73,9 @@ class _LensShaderSurfaceState extends State<LensShaderSurface>
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 6),
-    )..repeat();
+    );
     _loadShader();
+    _syncAnimation();
   }
 
   Future<void> _loadShader() async {
@@ -82,6 +83,7 @@ class _LensShaderSurfaceState extends State<LensShaderSurface>
       setState(() {
         _shaderLoadAttempted = true;
       });
+      _syncAnimation();
       return;
     }
 
@@ -96,6 +98,7 @@ class _LensShaderSurfaceState extends State<LensShaderSurface>
         _program = program;
         _shaderLoadAttempted = true;
       });
+      _syncAnimation();
     } catch (_) {
       if (!mounted) {
         return;
@@ -103,6 +106,25 @@ class _LensShaderSurfaceState extends State<LensShaderSurface>
       setState(() {
         _shaderLoadAttempted = true;
       });
+      _syncAnimation();
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant LensShaderSurface oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _syncAnimation();
+  }
+
+  void _syncAnimation() {
+    final bool shouldAnimate =
+        widget.enabled && widget.highlightStrength > 0 && _program != null;
+    if (shouldAnimate) {
+      if (!_controller.isAnimating) {
+        _controller.repeat();
+      }
+    } else if (_controller.isAnimating) {
+      _controller.stop();
     }
   }
 
@@ -114,6 +136,26 @@ class _LensShaderSurfaceState extends State<LensShaderSurface>
 
   @override
   Widget build(BuildContext context) {
+    if (!widget.enabled || widget.highlightStrength <= 0) {
+      return AndroidGlassSurface(
+        borderRadius: widget.borderRadius,
+        padding: widget.padding,
+        margin: widget.margin,
+        elevation: widget.elevation,
+        tintColor: widget.tintColor,
+        tintOpacity: widget.tintOpacity,
+        blurSigma: widget.blurSigma,
+        borderColor: widget.borderColor,
+        borderWidth: widget.borderWidth,
+        highlightStrength: widget.highlightStrength,
+        noiseOpacity: widget.noiseOpacity,
+        quality: widget.quality,
+        enabled: widget.enabled,
+        debugLabel: widget.debugLabel,
+        child: widget.child,
+      );
+    }
+
     final bool shaderLoaded = _program != null;
     final bool fallback = LensShaderSurface.shouldFallbackToGlass(
       shaderSupported: _shaderSupported,

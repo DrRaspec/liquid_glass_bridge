@@ -24,6 +24,9 @@ class NoiseOverlay extends StatefulWidget {
 }
 
 class _NoiseOverlayState extends State<NoiseOverlay> {
+  static ui.Image? _sharedImage;
+  static Future<ui.Image?>? _sharedLoader;
+
   ui.Image? _noiseImage;
 
   @override
@@ -33,6 +36,26 @@ class _NoiseOverlayState extends State<NoiseOverlay> {
   }
 
   Future<void> _loadNoise() async {
+    if (_sharedImage != null) {
+      if (mounted) {
+        setState(() {
+          _noiseImage = _sharedImage;
+        });
+      }
+      return;
+    }
+
+    _sharedLoader ??= _decodeNoise();
+    final ui.Image? image = await _sharedLoader;
+    if (!mounted) {
+      return;
+    }
+    setState(() {
+      _noiseImage = image;
+    });
+  }
+
+  static Future<ui.Image?> _decodeNoise() async {
     try {
       final ByteData data = await rootBundle.load(NoiseOverlay.assetPath);
       final Uint8List bytes = data.buffer.asUint8List();
@@ -44,14 +67,11 @@ class _NoiseOverlayState extends State<NoiseOverlay> {
       );
       final ui.Codec codec = await descriptor.instantiateCodec();
       final ui.FrameInfo frame = await codec.getNextFrame();
-      if (!mounted) {
-        return;
-      }
-      setState(() {
-        _noiseImage = frame.image;
-      });
+      _sharedImage = frame.image;
+      return _sharedImage;
     } catch (_) {
       // Asset is optional; silently skip if unavailable.
+      return null;
     }
   }
 
