@@ -1,3 +1,10 @@
+## 0.2.1
+
+- Increase public API dartdoc coverage to improve pub points.
+- Add package-level library documentation.
+- Remove an unnecessary Flutter import reported by static analysis.
+- Expand README with explicit iOS and Android setup/configuration steps.
+
 ## 0.2.0
 
 - Added Android native blur backend and `LiquidGlassMode.androidNative`.

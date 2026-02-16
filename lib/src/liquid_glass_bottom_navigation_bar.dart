@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'enums.dart';
@@ -15,8 +14,13 @@ class LiquidGlassNavItem {
     this.activeIcon,
   });
 
+  /// Icon shown when this item is not selected.
   final IconData icon;
+
+  /// Text label shown under the icon.
   final String label;
+
+  /// Optional icon shown when this item is selected.
   final IconData? activeIcon;
 }
 
@@ -54,28 +58,73 @@ class LiquidGlassBottomNavigationBar extends StatelessWidget {
          'currentIndex must be inside the items range.',
        );
 
+  /// Ordered items rendered in the tab bar.
   final List<LiquidGlassNavItem> items;
+
+  /// Zero-based index of the currently selected item.
   final int currentIndex;
+
+  /// Called when a tab is tapped with the tapped item index.
   final ValueChanged<int> onTap;
+
+  /// Backend selection mode for the liquid-glass renderer.
   final LiquidGlassMode mode;
+
+  /// Render quality preset for the selected backend.
   final LiquidGlassQuality quality;
+
+  /// Whether blur and visual effects are enabled.
   final bool enabled;
+
+  /// Total visual height of the navigation bar content.
   final double height;
+
+  /// External spacing around the glass container.
   final EdgeInsetsGeometry margin;
+
+  /// Internal spacing inside the glass container.
   final EdgeInsetsGeometry padding;
+
+  /// Corner radius of the glass container.
   final BorderRadius borderRadius;
+
+  /// Shadow elevation for the outer container.
   final double elevation;
+
+  /// Base tint color blended on top of blur.
   final Color tintColor;
+
+  /// Opacity applied to [tintColor].
   final double tintOpacity;
+
+  /// Blur sigma used by Flutter/native implementations when supported.
   final double blurSigma;
+
+  /// Border color drawn around the glass surface.
   final Color borderColor;
+
+  /// Border width drawn around the glass surface.
   final double borderWidth;
+
+  /// Strength of the top highlight overlay.
   final double highlightStrength;
+
+  /// Opacity of the subtle noise overlay.
   final double noiseOpacity;
+
+  /// Active item color. Defaults to the theme primary color.
   final Color? activeColor;
+
+  /// Inactive item color. Defaults to a dimmed on-surface color.
   final Color? inactiveColor;
+
+  /// Native iOS material style used in iOS-native mode.
   final LiquidGlassIosBlurStyle? iosBlurStyle;
+
+  /// Shared style override for this widget.
   final LiquidGlassStyle? style;
+
+  /// Platform-specific style overrides for this widget.
   final LiquidGlassPlatformStyle? platformStyle;
 
   @override

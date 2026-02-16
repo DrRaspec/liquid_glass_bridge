@@ -12,6 +12,55 @@ A cross-platform Flutter package that gives you one API for liquid-glass UI.
 flutter pub add liquid_glass_bridge
 ```
 
+## Platform Setup (iOS and Android)
+
+`liquid_glass_bridge` is auto-wired by Flutter plugins, but apps should verify
+these minimum platform settings:
+
+### iOS
+
+1. Set iOS deployment target to `13.0` or newer.
+
+```ruby
+# ios/Podfile
+platform :ios, '13.0'
+```
+
+2. Refresh CocoaPods after changing deployment targets:
+
+```bash
+cd ios && pod install
+```
+
+3. Use `LiquidGlassMode.auto` (recommended) or `LiquidGlassMode.iosNative` to
+   force UIKit rendering.
+4. No extra iOS permissions are required.
+
+### Android
+
+1. Set Android minimum SDK to `21` or newer in your app module.
+
+```gradle
+// android/app/build.gradle
+defaultConfig {
+    minSdkVersion 21
+}
+```
+
+2. Use `LiquidGlassMode.auto` (recommended) or
+   `LiquidGlassMode.androidNative` to force the native Android blur view.
+3. No extra Android permissions are required.
+
+If your Gradle setup cannot resolve `BlurView`, add JitPack to repositories:
+
+```gradle
+allprojects {
+    repositories {
+        maven { url 'https://jitpack.io' }
+    }
+}
+```
+
 ## Included Widgets
 
 - `LiquidGlassSurface`
