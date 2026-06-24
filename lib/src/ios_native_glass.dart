@@ -5,9 +5,10 @@ import 'package:flutter/widgets.dart';
 import 'android_glass.dart';
 import 'enums.dart';
 import 'liquid_glass_style.dart';
+import 'native_glass_availability.dart';
 
 /// iOS renderer that uses a native UIKit platform view when available.
-class IosNativeGlassSurface extends StatelessWidget {
+class IosNativeGlassSurface extends StatefulWidget {
   /// Creates the iOS-native renderer.
   const IosNativeGlassSurface({
     super.key,
@@ -49,71 +50,106 @@ class IosNativeGlassSurface extends StatelessWidget {
   final String? debugLabel;
 
   @override
+  State<IosNativeGlassSurface> createState() => _IosNativeGlassSurfaceState();
+}
+
+class _IosNativeGlassSurfaceState extends State<IosNativeGlassSurface> {
+  bool _nativeRegistered = false;
+  bool _checkedNativeRegistration = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkNativeRegistration();
+  }
+
+  Future<void> _checkNativeRegistration() async {
+    if (!_canUseNativeUIKit) {
+      return;
+    }
+    final bool registered = await NativeGlassAvailability.isRegistered();
+    if (!mounted) {
+      return;
+    }
+    setState(() {
+      _nativeRegistered = registered;
+      _checkedNativeRegistration = true;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    if (!_canUseNativeUIKit || !enabled) {
-      return AndroidGlassSurface(
-        borderRadius: borderRadius,
-        padding: padding,
-        margin: margin,
-        elevation: elevation,
-        tintColor: tintColor,
-        tintOpacity: tintOpacity,
-        blurSigma: blurSigma,
-        borderColor: borderColor,
-        borderWidth: borderWidth,
-        highlightStrength: highlightStrength,
-        noiseOpacity: noiseOpacity,
-        quality: quality,
-        enabled: enabled,
-        debugLabel: debugLabel,
-        child: child,
-      );
+    if (!_canUseNativeUIKit ||
+        !widget.enabled ||
+        !_checkedNativeRegistration ||
+        !_nativeRegistered) {
+      return _buildFlutterFallback();
     }
 
-    final double cornerRadius = borderRadius.topLeft.x;
+    final double cornerRadius = widget.borderRadius.topLeft.x;
 
     final Map<String, dynamic> params = <String, dynamic>{
-      'enabled': enabled,
-      'quality': quality.name,
+      'enabled': widget.enabled,
+      'quality': widget.quality.name,
       'borderRadius': cornerRadius,
-      'elevation': elevation,
-      'tintColor': tintColor.toARGB32(),
-      'tintOpacity': tintOpacity,
-      'blurSigma': blurSigma,
-      'borderColor': borderColor.toARGB32(),
-      'borderWidth': borderWidth,
-      'highlightStrength': highlightStrength,
-      'noiseOpacity': noiseOpacity,
+      'elevation': widget.elevation,
+      'tintColor': widget.tintColor.toARGB32(),
+      'tintOpacity': widget.tintOpacity,
+      'blurSigma': widget.blurSigma,
+      'borderColor': widget.borderColor.toARGB32(),
+      'borderWidth': widget.borderWidth,
+      'highlightStrength': widget.highlightStrength,
+      'noiseOpacity': widget.noiseOpacity,
     };
 
-    if (iosBlurStyle != null) {
-      params['iosBlurStyle'] = iosBlurStyle!.name;
+    if (widget.iosBlurStyle != null) {
+      params['iosBlurStyle'] = widget.iosBlurStyle!.name;
     }
 
     return RepaintBoundary(
       child: Container(
-        margin: margin,
+        margin: widget.margin,
         child: Semantics(
-          label: debugLabel,
+          label: widget.debugLabel,
           child: ClipRRect(
-            borderRadius: borderRadius,
+            borderRadius: widget.borderRadius,
             child: Stack(
               fit: StackFit.passthrough,
               children: <Widget>[
                 Positioned.fill(
                   child: UiKitView(
-                    viewType: _nativeViewType,
+                    viewType: IosNativeGlassSurface._nativeViewType,
                     layoutDirection: Directionality.of(context),
                     creationParams: params,
                     creationParamsCodec: const StandardMessageCodec(),
                   ),
                 ),
-                Padding(padding: padding, child: child),
+                Padding(padding: widget.padding, child: widget.child),
               ],
             ),
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildFlutterFallback() {
+    return AndroidGlassSurface(
+      borderRadius: widget.borderRadius,
+      padding: widget.padding,
+      margin: widget.margin,
+      elevation: widget.elevation,
+      tintColor: widget.tintColor,
+      tintOpacity: widget.tintOpacity,
+      blurSigma: widget.blurSigma,
+      borderColor: widget.borderColor,
+      borderWidth: widget.borderWidth,
+      highlightStrength: widget.highlightStrength,
+      noiseOpacity: widget.noiseOpacity,
+      quality: widget.quality,
+      enabled: widget.enabled,
+      debugLabel: widget.debugLabel,
+      child: widget.child,
     );
   }
 

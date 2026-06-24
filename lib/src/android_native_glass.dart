@@ -5,10 +5,11 @@ import 'package:flutter/services.dart';
 import 'android_glass.dart';
 import 'enums.dart';
 import 'glass_effects.dart';
+import 'native_glass_availability.dart';
 import 'noise_overlay.dart';
 
 /// Android-native blur renderer backed by a platform view.
-class AndroidNativeGlassSurface extends StatelessWidget {
+class AndroidNativeGlassSurface extends StatefulWidget {
   const AndroidNativeGlassSurface({
     super.key,
     required this.child,
@@ -47,39 +48,57 @@ class AndroidNativeGlassSurface extends StatelessWidget {
   final String? debugLabel;
 
   @override
+  State<AndroidNativeGlassSurface> createState() =>
+      _AndroidNativeGlassSurfaceState();
+}
+
+class _AndroidNativeGlassSurfaceState extends State<AndroidNativeGlassSurface> {
+  bool _nativeRegistered = false;
+  bool _checkedNativeRegistration = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkNativeRegistration();
+  }
+
+  Future<void> _checkNativeRegistration() async {
+    if (!_canUseNativeAndroid) {
+      return;
+    }
+    final bool registered = await NativeGlassAvailability.isRegistered();
+    if (!mounted) {
+      return;
+    }
+    setState(() {
+      _nativeRegistered = registered;
+      _checkedNativeRegistration = true;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    if (kIsWeb || defaultTargetPlatform != TargetPlatform.android || !enabled) {
-      return AndroidGlassSurface(
-        borderRadius: borderRadius,
-        padding: padding,
-        margin: margin,
-        elevation: elevation,
-        tintColor: tintColor,
-        tintOpacity: tintOpacity,
-        blurSigma: blurSigma,
-        borderColor: borderColor,
-        borderWidth: borderWidth,
-        highlightStrength: highlightStrength,
-        noiseOpacity: noiseOpacity,
-        quality: quality,
-        enabled: enabled,
-        debugLabel: debugLabel,
-        child: child,
-      );
+    if (!_canUseNativeAndroid ||
+        !widget.enabled ||
+        !_checkedNativeRegistration ||
+        !_nativeRegistered) {
+      return _buildFlutterFallback();
     }
 
-    final double effectiveBlur = blurSigma * quality.blurMultiplier;
-    final double effectiveNoise = noiseOpacity * quality.noiseMultiplier;
+    final double effectiveBlur =
+        widget.blurSigma * widget.quality.blurMultiplier;
+    final double effectiveNoise =
+        widget.noiseOpacity * widget.quality.noiseMultiplier;
     final double effectiveHighlight =
-        highlightStrength * quality.highlightMultiplier;
-    final double cornerRadius = borderRadius.topLeft.x;
+        widget.highlightStrength * widget.quality.highlightMultiplier;
+    final double cornerRadius = widget.borderRadius.topLeft.x;
 
     final String viewKey =
         '${effectiveBlur.toStringAsFixed(2)}_'
-        '${cornerRadius.toStringAsFixed(2)}_${enabled ? 1 : 0}';
+        '${cornerRadius.toStringAsFixed(2)}_${widget.enabled ? 1 : 0}';
 
     final Widget core = ClipRRect(
-      borderRadius: borderRadius,
+      borderRadius: widget.borderRadius,
       child: Stack(
         fit: StackFit.passthrough,
         children: <Widget>[
@@ -88,9 +107,9 @@ class AndroidNativeGlassSurface extends StatelessWidget {
               child: IgnorePointer(
                 child: AndroidView(
                   key: ValueKey<String>(viewKey),
-                  viewType: _nativeViewType,
+                  viewType: AndroidNativeGlassSurface._nativeViewType,
                   creationParams: <String, dynamic>{
-                    'enabled': enabled,
+                    'enabled': widget.enabled,
                     'blurSigma': effectiveBlur,
                     'borderRadius': cornerRadius,
                   },
@@ -101,25 +120,28 @@ class AndroidNativeGlassSurface extends StatelessWidget {
           DecoratedBox(
             decoration: BoxDecoration(
               color: applyOpacity(
-                tintColor,
-                (enabled ? tintOpacity : tintOpacity * 0.85).toDouble(),
+                widget.tintColor,
+                (widget.enabled
+                        ? widget.tintOpacity
+                        : widget.tintOpacity * 0.85)
+                    .toDouble(),
               ),
-              borderRadius: borderRadius,
+              borderRadius: widget.borderRadius,
               border: Border.all(
                 color: applyOpacity(
-                  borderColor,
-                  (enabled ? 1 : 0.75).toDouble(),
+                  widget.borderColor,
+                  (widget.enabled ? 1 : 0.75).toDouble(),
                 ),
-                width: borderWidth,
+                width: widget.borderWidth,
               ),
             ),
             child: Stack(
               fit: StackFit.passthrough,
               children: <Widget>[
-                Padding(padding: padding, child: child),
+                Padding(padding: widget.padding, child: widget.child),
                 Positioned.fill(
                   child: SpecularHighlight(
-                    borderRadius: borderRadius,
+                    borderRadius: widget.borderRadius,
                     strength: effectiveHighlight,
                   ),
                 ),
@@ -127,7 +149,7 @@ class AndroidNativeGlassSurface extends StatelessWidget {
                   Positioned.fill(
                     child: NoiseOverlay(
                       opacity: effectiveNoise.clamp(0.0, 1.0).toDouble(),
-                      borderRadius: borderRadius,
+                      borderRadius: widget.borderRadius,
                     ),
                   ),
               ],
@@ -139,22 +161,46 @@ class AndroidNativeGlassSurface extends StatelessWidget {
 
     return RepaintBoundary(
       child: Container(
-        margin: margin,
+        margin: widget.margin,
         decoration: BoxDecoration(
-          borderRadius: borderRadius,
-          boxShadow: elevation <= 0
+          borderRadius: widget.borderRadius,
+          boxShadow: widget.elevation <= 0
               ? null
               : <BoxShadow>[
                   BoxShadow(
                     color: applyOpacity(Colors.black, 0.18),
-                    blurRadius: elevation * 3.0,
-                    spreadRadius: elevation * 0.2,
-                    offset: Offset(0, elevation * 0.8),
+                    blurRadius: widget.elevation * 3.0,
+                    spreadRadius: widget.elevation * 0.2,
+                    offset: Offset(0, widget.elevation * 0.8),
                   ),
                 ],
         ),
-        child: Semantics(label: debugLabel, child: core),
+        child: Semantics(label: widget.debugLabel, child: core),
       ),
     );
+  }
+
+  Widget _buildFlutterFallback() {
+    return AndroidGlassSurface(
+      borderRadius: widget.borderRadius,
+      padding: widget.padding,
+      margin: widget.margin,
+      elevation: widget.elevation,
+      tintColor: widget.tintColor,
+      tintOpacity: widget.tintOpacity,
+      blurSigma: widget.blurSigma,
+      borderColor: widget.borderColor,
+      borderWidth: widget.borderWidth,
+      highlightStrength: widget.highlightStrength,
+      noiseOpacity: widget.noiseOpacity,
+      quality: widget.quality,
+      enabled: widget.enabled,
+      debugLabel: widget.debugLabel,
+      child: widget.child,
+    );
+  }
+
+  bool get _canUseNativeAndroid {
+    return !kIsWeb && defaultTargetPlatform == TargetPlatform.android;
   }
 }

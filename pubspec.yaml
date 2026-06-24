@@ -1,6 +1,6 @@
 name: liquid_glass_bridge
 description: Native-backed liquid glass, glassmorphism, and adaptive iOS/Android UI controls for Flutter.
-version: 0.3.1
+version: 0.3.2
 homepage: https://github.com/DrRaspec/liquid_glass_bridge
 repository: https://github.com/DrRaspec/liquid_glass_bridge
 issue_tracker: https://github.com/DrRaspec/liquid_glass_bridge/issues

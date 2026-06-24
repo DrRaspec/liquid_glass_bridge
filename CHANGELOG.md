@@ -1,3 +1,8 @@
+## 0.3.2
+
+- Prevent native platform-view crashes when the host app has not registered the plugin; iOS and Android now fall back to the Flutter glass renderer instead.
+- Add native registration checks for the iOS and Android glass backends.
+
 ## 0.3.1
 
 - Improve pub.dev discovery metadata with searchable topics, a clearer package description, and an issue tracker link.

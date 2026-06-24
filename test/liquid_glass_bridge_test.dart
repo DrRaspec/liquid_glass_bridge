@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:liquid_glass_bridge/liquid_glass_bridge.dart';
@@ -184,5 +185,29 @@ void main() {
       final Slider slider = tester.widget<Slider>(find.byType(Slider));
       expect(slider.onChanged, isNull);
     });
+  });
+
+  testWidgets('iOS native mode falls back when plugin is unregistered', (
+    WidgetTester tester,
+  ) async {
+    debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
+    try {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: LiquidGlassSurface(
+              mode: LiquidGlassMode.iosNative,
+              child: Text('Fallback glass'),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+
+      expect(find.text('Fallback glass'), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    } finally {
+      debugDefaultTargetPlatformOverride = null;
+    }
   });
 }

@@ -1,13 +1,13 @@
 Pod::Spec.new do |s|
   s.name             = 'liquid_glass_bridge'
-  s.version          = '0.2.1'
-  s.summary          = 'Platform-adaptive liquid glass widgets for Flutter.'
+  s.version          = '0.3.2'
+  s.summary          = 'Native-backed liquid glass widgets and controls for Flutter.'
   s.description      = <<-DESC
-A Flutter package that renders liquid-glass UI. On iOS it can use a native UIKit visual effect view.
+A Flutter package that renders native-backed liquid-glass surfaces and controls across iOS, Android, web, and desktop.
                        DESC
   s.homepage         = 'https://github.com/DrRaspec/liquid_glass_bridge'
   s.license          = { :file => '../LICENSE' }
-  s.author           = { 'liquid_glass_bridge' => 'dev@example.com' }
+  s.author           = { 'DrRaspec' => 'DrRaspec' }
   s.source           = { :path => '.' }
   s.source_files     = 'Classes/**/*'
   s.dependency       'Flutter'
