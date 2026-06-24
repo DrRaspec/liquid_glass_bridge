@@ -4,7 +4,7 @@ A cross-platform Flutter package that gives you one API for liquid-glass UI.
 
 ![Liquid Glass Bridge preview](doc/liquid_glass_bridge_preview.svg)
 
-- **iOS**: native Swift/UIKit renderer (`UIVisualEffectView`) for system-like frosted material, with iOS 26 and future iOS 28-style presets.
+- **iOS**: native Swift/UIKit renderer (`UIVisualEffectView`) for system-like frosted material, with iOS 26-inspired and future-style presets.
 - **Android**: native blur renderer with Android-tuned glass UI presets.
 - **Web/Desktop**: Flutter renderer (`BackdropFilter` + tint + border + highlight + optional noise).
 - **Lens mode**: shader overlay with automatic fallback.
@@ -13,7 +13,7 @@ A cross-platform Flutter package that gives you one API for liquid-glass UI.
 
 - Small focused API for glass surfaces and controls instead of a full app framework.
 - Native-backed blur on both iOS and Android, with Flutter fallbacks for web and desktop.
-- iOS 26, future iOS 28, and Android-tuned style presets from the same theme.
+- iOS-inspired, future-style, and Android-tuned presets from the same theme.
 - Glass controls that keep Flutter gestures, semantics, and theming.
 
 ## Install
@@ -219,9 +219,9 @@ LiquidGlassTheme(
 )
 ```
 
-Use `LiquidGlassPresets.adaptive` for iOS 26-style glass on iOS and
+Use `LiquidGlassPresets.adaptive` for iOS 26-inspired glass on iOS and
 Android-tuned glass on Android. Use `LiquidGlassPresets.adaptiveFuture` to opt
-iOS into the larger-radius, lighter iOS 28-style treatment while keeping the
+iOS into a larger-radius, lighter future-style treatment while keeping the
 Android UI tuned for Material surfaces.
 
 ### Button + Navigation
@@ -257,9 +257,10 @@ On iOS, `auto` and `iosNative` use a platform view backed by Swift/UIKit:
 - Flutter `child` content remains in Dart above the native layer
 - `blurSigma` is ignored for native iOS; use `iosBlurStyle` instead
 
-The iOS 26 and iOS 28 presets are visual presets over stable public UIKit
-materials. They are safe to run on newer iOS versions without requiring
-SDK-specific private APIs.
+The iOS presets are visual approximations over stable public UIKit materials.
+They are safe to run on newer iOS versions without requiring SDK-specific
+private APIs, but they do not promise a pixel-perfect clone of private Apple
+system surfaces.
 
 On Android, `auto` and `androidNative` use a platform view backed by a native
 blur view. If you need to force the Flutter renderer, set `mode` to

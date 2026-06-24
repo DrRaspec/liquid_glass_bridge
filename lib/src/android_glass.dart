@@ -56,15 +56,17 @@ class AndroidGlassSurface extends StatelessWidget {
     final Widget core = ClipRRect(
       borderRadius: borderRadius,
       child: Stack(
-        fit: StackFit.expand,
+        fit: StackFit.passthrough,
         children: <Widget>[
           if (enabled && effectiveBlur > 0)
-            BackdropFilter(
-              filter: ImageFilter.blur(
-                sigmaX: effectiveBlur,
-                sigmaY: effectiveBlur,
+            Positioned.fill(
+              child: BackdropFilter(
+                filter: ImageFilter.blur(
+                  sigmaX: effectiveBlur,
+                  sigmaY: effectiveBlur,
+                ),
+                child: const SizedBox.expand(),
               ),
-              child: const SizedBox.expand(),
             ),
           DecoratedBox(
             decoration: BoxDecoration(
@@ -82,18 +84,22 @@ class AndroidGlassSurface extends StatelessWidget {
               ),
             ),
             child: Stack(
-              fit: StackFit.expand,
+              fit: StackFit.passthrough,
               children: <Widget>[
-                SpecularHighlight(
-                  borderRadius: borderRadius,
-                  strength: effectiveHighlight,
+                Padding(padding: padding, child: child),
+                Positioned.fill(
+                  child: SpecularHighlight(
+                    borderRadius: borderRadius,
+                    strength: effectiveHighlight,
+                  ),
                 ),
                 if (enabled && effectiveNoise > 0)
-                  NoiseOverlay(
-                    opacity: effectiveNoise.clamp(0.0, 1.0).toDouble(),
-                    borderRadius: borderRadius,
+                  Positioned.fill(
+                    child: NoiseOverlay(
+                      opacity: effectiveNoise.clamp(0.0, 1.0).toDouble(),
+                      borderRadius: borderRadius,
+                    ),
                   ),
-                Padding(padding: padding, child: child),
               ],
             ),
           ),

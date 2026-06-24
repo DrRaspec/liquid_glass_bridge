@@ -208,21 +208,23 @@ class _LensShaderSurfaceState extends State<LensShaderSurface>
                 debugLabel: widget.debugLabel,
                 child: widget.child,
               ),
-              IgnorePointer(
-                child: Container(
-                  margin: widget.margin,
-                  child: ClipRRect(
-                    borderRadius: widget.borderRadius,
-                    child: CustomPaint(
-                      painter: _LensOverlayPainter(
-                        program: _program!,
-                        time: _controller.value,
-                        strength:
-                            (widget.highlightStrength * 0.6 + wobble * 0.35)
-                                .clamp(0.0, 1.0)
-                                .toDouble(),
+              Positioned.fill(
+                child: IgnorePointer(
+                  child: Container(
+                    margin: widget.margin,
+                    child: ClipRRect(
+                      borderRadius: widget.borderRadius,
+                      child: CustomPaint(
+                        painter: _LensOverlayPainter(
+                          program: _program!,
+                          time: _controller.value,
+                          strength:
+                              (widget.highlightStrength * 0.6 + wobble * 0.35)
+                                  .clamp(0.0, 1.0)
+                                  .toDouble(),
+                        ),
+                        child: const SizedBox.expand(),
                       ),
-                      child: const SizedBox.expand(),
                     ),
                   ),
                 ),

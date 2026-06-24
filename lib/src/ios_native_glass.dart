@@ -98,13 +98,15 @@ class IosNativeGlassSurface extends StatelessWidget {
           child: ClipRRect(
             borderRadius: borderRadius,
             child: Stack(
-              fit: StackFit.expand,
+              fit: StackFit.passthrough,
               children: <Widget>[
-                UiKitView(
-                  viewType: _nativeViewType,
-                  layoutDirection: Directionality.of(context),
-                  creationParams: params,
-                  creationParamsCodec: const StandardMessageCodec(),
+                Positioned.fill(
+                  child: UiKitView(
+                    viewType: _nativeViewType,
+                    layoutDirection: Directionality.of(context),
+                    creationParams: params,
+                    creationParamsCodec: const StandardMessageCodec(),
+                  ),
                 ),
                 Padding(padding: padding, child: child),
               ],

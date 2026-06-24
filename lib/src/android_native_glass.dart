@@ -81,19 +81,21 @@ class AndroidNativeGlassSurface extends StatelessWidget {
     final Widget core = ClipRRect(
       borderRadius: borderRadius,
       child: Stack(
-        fit: StackFit.expand,
+        fit: StackFit.passthrough,
         children: <Widget>[
           if (effectiveBlur > 0)
-            IgnorePointer(
-              child: AndroidView(
-                key: ValueKey<String>(viewKey),
-                viewType: _nativeViewType,
-                creationParams: <String, dynamic>{
-                  'enabled': enabled,
-                  'blurSigma': effectiveBlur,
-                  'borderRadius': cornerRadius,
-                },
-                creationParamsCodec: const StandardMessageCodec(),
+            Positioned.fill(
+              child: IgnorePointer(
+                child: AndroidView(
+                  key: ValueKey<String>(viewKey),
+                  viewType: _nativeViewType,
+                  creationParams: <String, dynamic>{
+                    'enabled': enabled,
+                    'blurSigma': effectiveBlur,
+                    'borderRadius': cornerRadius,
+                  },
+                  creationParamsCodec: const StandardMessageCodec(),
+                ),
               ),
             ),
           DecoratedBox(
@@ -112,18 +114,22 @@ class AndroidNativeGlassSurface extends StatelessWidget {
               ),
             ),
             child: Stack(
-              fit: StackFit.expand,
+              fit: StackFit.passthrough,
               children: <Widget>[
-                SpecularHighlight(
-                  borderRadius: borderRadius,
-                  strength: effectiveHighlight,
+                Padding(padding: padding, child: child),
+                Positioned.fill(
+                  child: SpecularHighlight(
+                    borderRadius: borderRadius,
+                    strength: effectiveHighlight,
+                  ),
                 ),
                 if (effectiveNoise > 0)
-                  NoiseOverlay(
-                    opacity: effectiveNoise.clamp(0.0, 1.0).toDouble(),
-                    borderRadius: borderRadius,
+                  Positioned.fill(
+                    child: NoiseOverlay(
+                      opacity: effectiveNoise.clamp(0.0, 1.0).toDouble(),
+                      borderRadius: borderRadius,
+                    ),
                   ),
-                Padding(padding: padding, child: child),
               ],
             ),
           ),

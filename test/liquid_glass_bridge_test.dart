@@ -99,6 +99,30 @@ void main() {
     expect(surface.highlightStrength, 0.35);
   });
 
+  testWidgets('surface shrink-wraps inside an unbounded sliver', (
+    WidgetTester tester,
+  ) async {
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: Scaffold(
+          body: CustomScrollView(
+            slivers: <Widget>[
+              SliverToBoxAdapter(
+                child: LiquidGlassSurface(
+                  mode: LiquidGlassMode.flutterGlass,
+                  child: Text('Empty todos'),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+
+    expect(tester.takeException(), isNull);
+    expect(find.text('Empty todos'), findsOneWidget);
+  });
+
   group('glass controls', () {
     testWidgets('segmented control reports selected value', (
       WidgetTester tester,
