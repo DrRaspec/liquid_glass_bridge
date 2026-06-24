@@ -49,11 +49,7 @@ class LiquidGlassThemeData {
     return LiquidGlassThemeData(
       style: (a.style == null && b.style == null)
           ? null
-          : LiquidGlassStyle.lerp(
-              a.style ?? b.style!,
-              b.style ?? a.style!,
-              t,
-            ),
+          : LiquidGlassStyle.lerp(a.style ?? b.style!, b.style ?? a.style!, t),
       platformStyle: (a.platformStyle == null && b.platformStyle == null)
           ? null
           : LiquidGlassPlatformStyle.lerp(
@@ -80,11 +76,7 @@ class LiquidGlassThemeData {
 }
 
 class LiquidGlassTheme extends InheritedTheme {
-  const LiquidGlassTheme({
-    super.key,
-    required this.data,
-    required super.child,
-  });
+  const LiquidGlassTheme({super.key, required this.data, required super.child});
 
   final LiquidGlassThemeData data;
 

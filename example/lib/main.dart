@@ -32,118 +32,141 @@ class DemoScreen extends StatefulWidget {
 class _DemoScreenState extends State<DemoScreen> {
   LiquidGlassMode _mode = LiquidGlassMode.auto;
   LiquidGlassQuality _quality = LiquidGlassQuality.medium;
+  _PresetStyle _presetStyle = _PresetStyle.adaptive;
+  _DemoDensity _density = _DemoDensity.comfortable;
+  bool _liveEffects = true;
   double _blur = 18;
   double _noise = 0.05;
   int _currentIndex = 0;
 
   static const List<LiquidGlassNavItem> _items = <LiquidGlassNavItem>[
-    LiquidGlassNavItem(icon: Icons.home_outlined, activeIcon: Icons.home, label: 'Home'),
-    LiquidGlassNavItem(icon: Icons.search_outlined, activeIcon: Icons.search, label: 'Search'),
-    LiquidGlassNavItem(icon: Icons.person_outline, activeIcon: Icons.person, label: 'Profile'),
+    LiquidGlassNavItem(
+      icon: Icons.home_outlined,
+      activeIcon: Icons.home,
+      label: 'Home',
+    ),
+    LiquidGlassNavItem(
+      icon: Icons.search_outlined,
+      activeIcon: Icons.search,
+      label: 'Search',
+    ),
+    LiquidGlassNavItem(
+      icon: Icons.person_outline,
+      activeIcon: Icons.person,
+      label: 'Profile',
+    ),
   ];
+
+  LiquidGlassPlatformStyle get _effectivePlatformStyle {
+    LiquidGlassStyle applyControls(LiquidGlassStyle style) {
+      return style.copyWith(blurSigma: _blur, noiseOpacity: _noise);
+    }
+
+    final LiquidGlassPlatformStyle base = _presetStyle.platformStyle;
+    return LiquidGlassPlatformStyle(
+      fallback: applyControls(base.fallback),
+      ios: base.ios == null ? null : applyControls(base.ios!),
+      android: base.android == null ? null : applyControls(base.android!),
+      web: base.web == null ? null : applyControls(base.web!),
+      macos: base.macos == null ? null : applyControls(base.macos!),
+      windows: base.windows == null ? null : applyControls(base.windows!),
+      linux: base.linux == null ? null : applyControls(base.linux!),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      extendBody: true,
-      appBar: LiquidGlassNavigationBar(
+    return LiquidGlassTheme(
+      data: LiquidGlassThemeData(
+        platformStyle: _effectivePlatformStyle,
         mode: _mode,
         quality: _quality,
-        blurSigma: _blur,
-        noiseOpacity: _noise,
-        title: const Text('Liquid Glass Bridge'),
-        leading: IconButton(
-          icon: const Icon(Icons.menu),
-          onPressed: () {},
-        ),
-        trailing: IconButton(
-          icon: const Icon(Icons.tune),
-          onPressed: () {},
-        ),
       ),
-      bottomNavigationBar: LiquidGlassBottomNavigationBar(
-        items: _items,
-        currentIndex: _currentIndex,
-        onTap: (int value) => setState(() => _currentIndex = value),
-        mode: _mode,
-        quality: _quality,
-        blurSigma: _blur,
-        noiseOpacity: _noise,
-      ),
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: <Color>[
-              Color(0xFFB9D6FF),
-              Color(0xFFF9D7FF),
-              Color(0xFFD4FFE7),
-            ],
+      child: Scaffold(
+        extendBody: true,
+        appBar: LiquidGlassNavigationBar(
+          blurSigma: _blur,
+          noiseOpacity: _noise,
+          title: const Text('Liquid Glass Bridge'),
+          leading: IconButton(icon: const Icon(Icons.menu), onPressed: () {}),
+          trailing: IconButton(icon: const Icon(Icons.tune), onPressed: () {}),
+        ),
+        bottomNavigationBar: LiquidGlassBottomNavigationBar(
+          items: _items,
+          currentIndex: _currentIndex,
+          onTap: (int value) => setState(() => _currentIndex = value),
+          blurSigma: _blur,
+          noiseOpacity: _noise,
+        ),
+        body: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: <Color>[
+                Color(0xFFB9D6FF),
+                Color(0xFFF9D7FF),
+                Color(0xFFD4FFE7),
+              ],
+            ),
           ),
-        ),
-        child: SafeArea(
-          child: ListView(
-            padding: const EdgeInsets.fromLTRB(16, 8, 16, 120),
-            children: <Widget>[
-              _buildControls(),
-              const SizedBox(height: 12),
-              Wrap(
-                spacing: 12,
-                runSpacing: 12,
-                children: <Widget>[
-                  LiquidGlassButton(
-                    mode: _mode,
-                    quality: _quality,
+          child: SafeArea(
+            child: ListView(
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 120),
+              children: <Widget>[
+                _buildControls(),
+                const SizedBox(height: 12),
+                Wrap(
+                  spacing: 12,
+                  runSpacing: 12,
+                  children: <Widget>[
+                    LiquidGlassButton(
+                      blurSigma: _blur,
+                      noiseOpacity: _noise,
+                      onPressed: () {},
+                      child: const Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Icon(Icons.add),
+                          SizedBox(width: 6),
+                          Text('New'),
+                        ],
+                      ),
+                    ),
+                    LiquidGlassButton(
+                      blurSigma: _blur,
+                      noiseOpacity: _noise,
+                      onPressed: () {},
+                      child: const Text('Continue'),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                ...List<Widget>.generate(8, (int index) {
+                  return LiquidGlassSurface(
                     blurSigma: _blur,
                     noiseOpacity: _noise,
-                    onPressed: () {},
-                    child: const Row(
-                      mainAxisSize: MainAxisSize.min,
+                    margin: const EdgeInsets.only(bottom: 12),
+                    child: Row(
                       children: <Widget>[
-                        Icon(Icons.add),
-                        SizedBox(width: 6),
-                        Text('New'),
+                        CircleAvatar(
+                          backgroundColor: Colors.white.withValues(alpha: 0.4),
+                          child: Text('${index + 1}'),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Text(
+                            'Glass Card #${index + 1}',
+                            style: Theme.of(context).textTheme.titleMedium,
+                          ),
+                        ),
+                        const Icon(Icons.chevron_right),
                       ],
                     ),
-                  ),
-                  LiquidGlassButton(
-                    mode: _mode,
-                    quality: _quality,
-                    blurSigma: _blur,
-                    noiseOpacity: _noise,
-                    onPressed: () {},
-                    child: const Text('Continue'),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 12),
-              ...List<Widget>.generate(8, (int index) {
-                return LiquidGlassSurface(
-                  mode: _mode,
-                  quality: _quality,
-                  blurSigma: _blur,
-                  noiseOpacity: _noise,
-                  margin: const EdgeInsets.only(bottom: 12),
-                  child: Row(
-                    children: <Widget>[
-                      CircleAvatar(
-                        backgroundColor: Colors.white.withValues(alpha: 0.4),
-                        child: Text('${index + 1}'),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Text(
-                          'Glass Card #${index + 1}',
-                          style: Theme.of(context).textTheme.titleMedium,
-                        ),
-                      ),
-                      const Icon(Icons.chevron_right),
-                    ],
-                  ),
-                );
-              }),
-            ],
+                  );
+                }),
+              ],
+            ),
           ),
         ),
       ),
@@ -152,10 +175,6 @@ class _DemoScreenState extends State<DemoScreen> {
 
   Widget _buildControls() {
     return LiquidGlassSurface(
-      mode: _mode,
-      quality: _quality,
-      blurSigma: _blur,
-      noiseOpacity: _noise,
       margin: const EdgeInsets.only(top: 8),
       borderRadius: BorderRadius.circular(20),
       child: Column(
@@ -169,7 +188,8 @@ class _DemoScreenState extends State<DemoScreen> {
                 label: 'Mode',
                 value: _mode,
                 values: LiquidGlassMode.values,
-                onChanged: (LiquidGlassMode value) => setState(() => _mode = value),
+                onChanged: (LiquidGlassMode value) =>
+                    setState(() => _mode = value),
               ),
               _enumDropdown<LiquidGlassQuality>(
                 label: 'Quality',
@@ -178,22 +198,58 @@ class _DemoScreenState extends State<DemoScreen> {
                 onChanged: (LiquidGlassQuality value) =>
                     setState(() => _quality = value),
               ),
+              _enumDropdown<_PresetStyle>(
+                label: 'Style',
+                value: _presetStyle,
+                values: _PresetStyle.values,
+                onChanged: (_PresetStyle value) =>
+                    setState(() => _presetStyle = value),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          LiquidGlassSegmentedControl<_DemoDensity>(
+            children: const <_DemoDensity, Widget>{
+              _DemoDensity.compact: Text('Compact'),
+              _DemoDensity.comfortable: Text('Comfort'),
+              _DemoDensity.expanded: Text('Wide'),
+            },
+            groupValue: _density,
+            onValueChanged: (_DemoDensity value) {
+              setState(() => _density = value);
+            },
+          ),
+          const SizedBox(height: 10),
+          Row(
+            children: <Widget>[
+              Expanded(
+                child: Text(
+                  'Live native effects',
+                  style: Theme.of(context).textTheme.titleSmall,
+                ),
+              ),
+              LiquidGlassSwitch(
+                value: _liveEffects,
+                onChanged: (bool value) => setState(() => _liveEffects = value),
+              ),
             ],
           ),
           const SizedBox(height: 10),
           Text('Blur: ${_blur.toStringAsFixed(1)}'),
-          Slider(
+          LiquidGlassSlider(
             value: _blur,
             min: 0,
             max: 32,
             onChanged: (double value) => setState(() => _blur = value),
+            enabled: _liveEffects,
           ),
           Text('Noise: ${_noise.toStringAsFixed(2)}'),
-          Slider(
+          LiquidGlassSlider(
             value: _noise,
             min: 0,
             max: 0.2,
             onChanged: (double value) => setState(() => _noise = value),
+            enabled: _liveEffects,
           ),
         ],
       ),
@@ -218,15 +274,21 @@ class _DemoScreenState extends State<DemoScreen> {
             }
           },
           items: values
-              .map(
-                (T e) => DropdownMenuItem<T>(
-                  value: e,
-                  child: Text(e.name),
-                ),
-              )
+              .map((T e) => DropdownMenuItem<T>(value: e, child: Text(e.name)))
               .toList(),
         ),
       ],
     );
   }
 }
+
+enum _PresetStyle {
+  adaptive(LiquidGlassPresets.adaptive),
+  adaptiveFuture(LiquidGlassPresets.adaptiveFuture);
+
+  const _PresetStyle(this.platformStyle);
+
+  final LiquidGlassPlatformStyle platformStyle;
+}
+
+enum _DemoDensity { compact, comfortable, expanded }

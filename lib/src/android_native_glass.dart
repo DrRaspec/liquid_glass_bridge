@@ -70,10 +70,12 @@ class AndroidNativeGlassSurface extends StatelessWidget {
 
     final double effectiveBlur = blurSigma * quality.blurMultiplier;
     final double effectiveNoise = noiseOpacity * quality.noiseMultiplier;
-    final double effectiveHighlight = highlightStrength * quality.highlightMultiplier;
+    final double effectiveHighlight =
+        highlightStrength * quality.highlightMultiplier;
     final double cornerRadius = borderRadius.topLeft.x;
 
-    final String viewKey = '${effectiveBlur.toStringAsFixed(2)}_'
+    final String viewKey =
+        '${effectiveBlur.toStringAsFixed(2)}_'
         '${cornerRadius.toStringAsFixed(2)}_${enabled ? 1 : 0}';
 
     final Widget core = ClipRRect(
@@ -121,10 +123,7 @@ class AndroidNativeGlassSurface extends StatelessWidget {
                     opacity: effectiveNoise.clamp(0.0, 1.0).toDouble(),
                     borderRadius: borderRadius,
                   ),
-                Padding(
-                  padding: padding,
-                  child: child,
-                ),
+                Padding(padding: padding, child: child),
               ],
             ),
           ),
@@ -148,10 +147,7 @@ class AndroidNativeGlassSurface extends StatelessWidget {
                   ),
                 ],
         ),
-        child: Semantics(
-          label: debugLabel,
-          child: core,
-        ),
+        child: Semantics(label: debugLabel, child: core),
       ),
     );
   }

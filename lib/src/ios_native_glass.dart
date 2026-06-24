@@ -106,10 +106,7 @@ class IosNativeGlassSurface extends StatelessWidget {
                   creationParams: params,
                   creationParamsCodec: const StandardMessageCodec(),
                 ),
-                Padding(
-                  padding: padding,
-                  child: child,
-                ),
+                Padding(padding: padding, child: child),
               ],
             ),
           ),

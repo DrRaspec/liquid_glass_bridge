@@ -1,3 +1,11 @@
+## 0.3.0
+
+- Add iOS 26, future iOS 28, Android, and adaptive platform style presets.
+- Add `LiquidGlassSegmentedControl`, `LiquidGlassSwitch`, and `LiquidGlassSlider`.
+- Add a README preview image that shows iOS 26, future iOS, and Android styling.
+- Fix Android native blur setup when Flutter provides a wrapped platform-view context.
+- Update the example to preview adaptive iOS/Android UI styles.
+
 ## 0.2.1
 
 - Increase public API dartdoc coverage to improve pub points.

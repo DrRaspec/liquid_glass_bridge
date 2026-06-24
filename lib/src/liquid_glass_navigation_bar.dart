@@ -92,12 +92,12 @@ class LiquidGlassNavigationBar extends StatelessWidget
           );
     final LiquidGlassMode resolvedMode =
         (theme?.mode != null && mode == LiquidGlassMode.auto)
-            ? theme!.mode!
-            : mode;
+        ? theme!.mode!
+        : mode;
     final LiquidGlassQuality resolvedQuality =
         (theme?.quality != null && quality == LiquidGlassQuality.medium)
-            ? theme!.quality!
-            : quality;
+        ? theme!.quality!
+        : quality;
 
     return SafeArea(
       bottom: false,

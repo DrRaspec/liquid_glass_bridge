@@ -46,7 +46,8 @@ class AndroidGlassSurface extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double effectiveBlur = (enabled ? blurSigma : 0) * quality.blurMultiplier;
+    final double effectiveBlur =
+        (enabled ? blurSigma : 0) * quality.blurMultiplier;
     final double effectiveNoise =
         (enabled ? noiseOpacity : 0) * quality.noiseMultiplier;
     final double effectiveHighlight =
@@ -92,10 +93,7 @@ class AndroidGlassSurface extends StatelessWidget {
                     opacity: effectiveNoise.clamp(0.0, 1.0).toDouble(),
                     borderRadius: borderRadius,
                   ),
-                Padding(
-                  padding: padding,
-                  child: child,
-                ),
+                Padding(padding: padding, child: child),
               ],
             ),
           ),
@@ -119,10 +117,7 @@ class AndroidGlassSurface extends StatelessWidget {
                   ),
                 ],
         ),
-        child: Semantics(
-          label: debugLabel,
-          child: core,
-        ),
+        child: Semantics(label: debugLabel, child: core),
       ),
     );
   }

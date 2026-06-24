@@ -61,17 +61,21 @@ class LiquidGlassStyle {
   ) {
     return LiquidGlassStyle(
       borderRadius:
-          BorderRadius.lerp(a.borderRadius, b.borderRadius, t) ?? b.borderRadius,
+          BorderRadius.lerp(a.borderRadius, b.borderRadius, t) ??
+          b.borderRadius,
       elevation: ui.lerpDouble(a.elevation, b.elevation, t) ?? b.elevation,
       tintColor: Color.lerp(a.tintColor, b.tintColor, t) ?? b.tintColor,
-      tintOpacity: ui.lerpDouble(a.tintOpacity, b.tintOpacity, t) ?? b.tintOpacity,
+      tintOpacity:
+          ui.lerpDouble(a.tintOpacity, b.tintOpacity, t) ?? b.tintOpacity,
       blurSigma: ui.lerpDouble(a.blurSigma, b.blurSigma, t) ?? b.blurSigma,
       borderColor: Color.lerp(a.borderColor, b.borderColor, t) ?? b.borderColor,
-      borderWidth: ui.lerpDouble(a.borderWidth, b.borderWidth, t) ?? b.borderWidth,
+      borderWidth:
+          ui.lerpDouble(a.borderWidth, b.borderWidth, t) ?? b.borderWidth,
       highlightStrength:
           ui.lerpDouble(a.highlightStrength, b.highlightStrength, t) ??
-              b.highlightStrength,
-      noiseOpacity: ui.lerpDouble(a.noiseOpacity, b.noiseOpacity, t) ?? b.noiseOpacity,
+          b.highlightStrength,
+      noiseOpacity:
+          ui.lerpDouble(a.noiseOpacity, b.noiseOpacity, t) ?? b.noiseOpacity,
       iosBlurStyle: t < 0.5
           ? (a.iosBlurStyle ?? b.iosBlurStyle)
           : (b.iosBlurStyle ?? a.iosBlurStyle),
@@ -121,17 +125,17 @@ class LiquidGlassStyle {
 
   @override
   int get hashCode => Object.hash(
-        borderRadius,
-        elevation,
-        tintColor,
-        tintOpacity,
-        blurSigma,
-        borderColor,
-        borderWidth,
-        highlightStrength,
-        noiseOpacity,
-        iosBlurStyle,
-      );
+    borderRadius,
+    elevation,
+    tintColor,
+    tintOpacity,
+    blurSigma,
+    borderColor,
+    borderWidth,
+    highlightStrength,
+    noiseOpacity,
+    iosBlurStyle,
+  );
 }
 
 /// Platform-specific overrides for liquid glass styling.
@@ -148,13 +152,13 @@ class LiquidGlassPlatformStyle {
   });
 
   const LiquidGlassPlatformStyle.all(LiquidGlassStyle style)
-      : fallback = style,
-        ios = null,
-        android = null,
-        web = null,
-        macos = null,
-        windows = null,
-        linux = null;
+    : fallback = style,
+      ios = null,
+      android = null,
+      web = null,
+      macos = null,
+      windows = null,
+      linux = null;
 
   final LiquidGlassStyle fallback;
   final LiquidGlassStyle? ios;
@@ -262,6 +266,64 @@ class LiquidGlassPresets {
     highlightStrength: 0.45,
     noiseOpacity: 0.06,
   );
+
+  /// iOS 26-inspired preset for rounded, bright, system-material glass.
+  ///
+  /// This stays on public UIKit material APIs in native mode, so it remains
+  /// compatible when running on newer iOS versions.
+  static const LiquidGlassStyle ios26 = LiquidGlassStyle(
+    borderRadius: BorderRadius.all(Radius.circular(26)),
+    elevation: 10,
+    tintOpacity: 0.18,
+    blurSigma: 20,
+    borderColor: Color(0xB3FFFFFF),
+    borderWidth: 1,
+    highlightStrength: 0.48,
+    noiseOpacity: 0.04,
+    iosBlurStyle: LiquidGlassIosBlurStyle.systemMaterial,
+  );
+
+  /// Future-leaning iOS preset for larger radii and lighter material.
+  ///
+  /// Use this when you want a more spacious iOS 28-style treatment while the
+  /// native renderer continues to use stable UIKit APIs.
+  static const LiquidGlassStyle ios28 = LiquidGlassStyle(
+    borderRadius: BorderRadius.all(Radius.circular(30)),
+    elevation: 12,
+    tintOpacity: 0.14,
+    blurSigma: 24,
+    borderColor: Color(0xCCFFFFFF),
+    borderWidth: 1,
+    highlightStrength: 0.55,
+    noiseOpacity: 0.03,
+    iosBlurStyle: LiquidGlassIosBlurStyle.systemUltraThinMaterial,
+  );
+
+  /// Android-tuned preset with a slightly denser surface and Material-friendly
+  /// depth.
+  static const LiquidGlassStyle android = LiquidGlassStyle(
+    borderRadius: BorderRadius.all(Radius.circular(20)),
+    elevation: 6,
+    tintOpacity: 0.24,
+    blurSigma: 18,
+    borderColor: Color(0x80FFFFFF),
+    borderWidth: 1,
+    highlightStrength: 0.34,
+    noiseOpacity: 0.05,
+  );
+
+  /// Platform-adaptive style that uses iOS 26 visuals on iOS and Android-tuned
+  /// visuals on Android.
+  static const LiquidGlassPlatformStyle adaptive = LiquidGlassPlatformStyle(
+    fallback: frosted,
+    ios: ios26,
+    android: android,
+  );
+
+  /// Platform-adaptive style that opts iOS into the future-leaning iOS 28
+  /// treatment while keeping Android on its native-tuned preset.
+  static const LiquidGlassPlatformStyle adaptiveFuture =
+      LiquidGlassPlatformStyle(fallback: frosted, ios: ios28, android: android);
 }
 
 /// Widget-specific defaults to keep the look consistent with current API.

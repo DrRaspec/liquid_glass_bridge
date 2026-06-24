@@ -185,7 +185,8 @@ class _LensShaderSurfaceState extends State<LensShaderSurface>
     return AnimatedBuilder(
       animation: _controller,
       builder: (BuildContext context, Widget? _) {
-        final double wobble = (math.sin(_controller.value * math.pi * 2.0) * 0.5 + 0.5);
+        final double wobble =
+            (math.sin(_controller.value * math.pi * 2.0) * 0.5 + 0.5);
         return RepaintBoundary(
           child: Stack(
             fit: StackFit.passthrough,
@@ -216,9 +217,10 @@ class _LensShaderSurfaceState extends State<LensShaderSurface>
                       painter: _LensOverlayPainter(
                         program: _program!,
                         time: _controller.value,
-                        strength: (widget.highlightStrength * 0.6 + wobble * 0.35)
-                            .clamp(0.0, 1.0)
-                            .toDouble(),
+                        strength:
+                            (widget.highlightStrength * 0.6 + wobble * 0.35)
+                                .clamp(0.0, 1.0)
+                                .toDouble(),
                       ),
                       child: const SizedBox.expand(),
                     ),

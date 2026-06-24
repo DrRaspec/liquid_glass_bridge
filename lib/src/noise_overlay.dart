@@ -85,10 +85,7 @@ class _NoiseOverlayState extends State<NoiseOverlay> {
       child: ClipRRect(
         borderRadius: widget.borderRadius,
         child: CustomPaint(
-          painter: _NoisePainter(
-            image: _noiseImage!,
-            opacity: widget.opacity,
-          ),
+          painter: _NoisePainter(image: _noiseImage!, opacity: widget.opacity),
           child: const SizedBox.expand(),
         ),
       ),
@@ -97,10 +94,7 @@ class _NoiseOverlayState extends State<NoiseOverlay> {
 }
 
 class _NoisePainter extends CustomPainter {
-  _NoisePainter({
-    required this.image,
-    required this.opacity,
-  });
+  _NoisePainter({required this.image, required this.opacity});
 
   final ui.Image image;
   final double opacity;

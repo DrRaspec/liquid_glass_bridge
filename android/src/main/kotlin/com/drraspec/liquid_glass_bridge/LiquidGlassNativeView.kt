@@ -2,6 +2,7 @@ package com.drraspec.liquid_glass_bridge
 
 import android.app.Activity
 import android.content.Context
+import android.content.ContextWrapper
 import android.graphics.Color
 import android.graphics.Outline
 import android.view.View
@@ -72,7 +73,7 @@ class LiquidGlassNativeView(
   }
 
   private fun setupBlur(enabled: Boolean, blurRadius: Float) {
-    val activity = context as? Activity
+    val activity = findActivity(context)
     val decorView = activity?.window?.decorView
     val root = decorView?.findViewById<ViewGroup>(android.R.id.content)
 
@@ -85,6 +86,14 @@ class LiquidGlassNativeView(
       .setFrameClearDrawable(decorView.background)
       .setBlurRadius(if (enabled) blurRadius else 0f)
       .setBlurAutoUpdate(true)
+  }
+
+  private tailrec fun findActivity(context: Context?): Activity? {
+    return when (context) {
+      is Activity -> context
+      is ContextWrapper -> findActivity(context.baseContext)
+      else -> null
+    }
   }
 
   private fun boolArg(key: String, defaultValue: Boolean): Boolean {

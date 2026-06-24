@@ -164,12 +164,12 @@ class LiquidGlassBottomNavigationBar extends StatelessWidget {
           );
     final LiquidGlassMode resolvedMode =
         (theme?.mode != null && mode == LiquidGlassMode.auto)
-            ? theme!.mode!
-            : mode;
+        ? theme!.mode!
+        : mode;
     final LiquidGlassQuality resolvedQuality =
         (theme?.quality != null && quality == LiquidGlassQuality.medium)
-            ? theme!.quality!
-            : quality;
+        ? theme!.quality!
+        : quality;
 
     return LiquidGlassSurface(
       mode: resolvedMode,
@@ -222,9 +222,11 @@ class LiquidGlassBottomNavigationBar extends StatelessWidget {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                              color: color,
-                              fontWeight: isActive ? FontWeight.w600 : FontWeight.w500,
-                            ),
+                          color: color,
+                          fontWeight: isActive
+                              ? FontWeight.w600
+                              : FontWeight.w500,
+                        ),
                       ),
                     ],
                   ),

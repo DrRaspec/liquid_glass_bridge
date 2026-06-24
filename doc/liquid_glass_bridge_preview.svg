@@ -1,0 +1,136 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="820" viewBox="0 0 1440 820" role="img" aria-labelledby="title desc">
+  <title id="title">Liquid Glass Bridge UI preview</title>
+  <desc id="desc">Three mobile UI previews showing iOS 26, iOS 28, and Android glass styles.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#9bc7ff"/>
+      <stop offset="0.42" stop-color="#ffd4f2"/>
+      <stop offset="1" stop-color="#b9f6dc"/>
+    </linearGradient>
+    <linearGradient id="phoneBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#edf7ff"/>
+      <stop offset="0.55" stop-color="#ffe8f7"/>
+      <stop offset="1" stop-color="#e5fff0"/>
+    </linearGradient>
+    <linearGradient id="glass" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.78"/>
+      <stop offset="0.42" stop-color="#ffffff" stop-opacity="0.34"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0.18"/>
+    </linearGradient>
+    <linearGradient id="glassDark" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.48"/>
+      <stop offset="1" stop-color="#eef4ff" stop-opacity="0.16"/>
+    </linearGradient>
+    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="150%">
+      <feDropShadow dx="0" dy="18" stdDeviation="22" flood-color="#24314f" flood-opacity="0.20"/>
+    </filter>
+    <filter id="glassShadow" x="-20%" y="-20%" width="140%" height="150%">
+      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#233052" flood-opacity="0.16"/>
+    </filter>
+    <clipPath id="phoneClip1">
+      <rect x="118" y="142" width="320" height="578" rx="44"/>
+    </clipPath>
+    <clipPath id="phoneClip2">
+      <rect x="560" y="112" width="320" height="638" rx="50"/>
+    </clipPath>
+    <clipPath id="phoneClip3">
+      <rect x="1002" y="142" width="320" height="578" rx="34"/>
+    </clipPath>
+  </defs>
+
+  <rect width="1440" height="820" fill="url(#bg)"/>
+  <circle cx="188" cy="130" r="172" fill="#ffffff" opacity="0.25"/>
+  <circle cx="1236" cy="698" r="206" fill="#ffffff" opacity="0.20"/>
+  <circle cx="730" cy="358" r="302" fill="#ffffff" opacity="0.14"/>
+
+  <text x="720" y="72" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="42" font-weight="800" fill="#102033">Liquid Glass Bridge</text>
+  <text x="720" y="112" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="19" font-weight="500" fill="#42526a">Native iOS and Android blur surfaces with Flutter-first controls</text>
+
+  <g filter="url(#softShadow)">
+    <rect x="118" y="142" width="320" height="578" rx="44" fill="#101725"/>
+    <rect x="128" y="152" width="300" height="558" rx="36" fill="url(#phoneBg)"/>
+  </g>
+  <g clip-path="url(#phoneClip1)">
+    <circle cx="174" cy="218" r="94" fill="#7db8ff" opacity="0.48"/>
+    <circle cx="394" cy="318" r="132" fill="#ffafe2" opacity="0.42"/>
+    <circle cx="232" cy="620" r="146" fill="#9df1c6" opacity="0.46"/>
+    <rect x="148" y="178" width="260" height="66" rx="28" fill="url(#glass)" stroke="#ffffff" stroke-opacity="0.76" filter="url(#glassShadow)"/>
+    <text x="178" y="219" font-family="Inter, Arial, sans-serif" font-size="19" font-weight="800" fill="#172336">iOS 26</text>
+    <circle cx="367" cy="211" r="18" fill="#ffffff" opacity="0.78"/>
+    <path d="M361 211h12M367 205v12" stroke="#2f6fff" stroke-width="2.5" stroke-linecap="round"/>
+
+    <rect x="154" y="282" width="248" height="108" rx="28" fill="url(#glass)" stroke="#ffffff" stroke-opacity="0.70" filter="url(#glassShadow)"/>
+    <text x="182" y="324" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="800" fill="#142238">Frosted card</text>
+    <text x="182" y="352" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="500" fill="#506176">Native UIKit material</text>
+    <rect x="182" y="365" width="104" height="10" rx="5" fill="#ffffff" opacity="0.64"/>
+
+    <rect x="154" y="424" width="248" height="50" rx="25" fill="url(#glassDark)" stroke="#ffffff" stroke-opacity="0.58"/>
+    <rect x="160" y="430" width="78" height="38" rx="19" fill="#ffffff" opacity="0.78"/>
+    <text x="185" y="454" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="800" fill="#182235">Home</text>
+    <text x="258" y="454" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#617083">Work</text>
+    <text x="332" y="454" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#617083">More</text>
+
+    <rect x="154" y="618" width="248" height="68" rx="32" fill="url(#glass)" stroke="#ffffff" stroke-opacity="0.76" filter="url(#glassShadow)"/>
+    <circle cx="205" cy="652" r="18" fill="#2f6fff"/>
+    <circle cx="278" cy="652" r="18" fill="#ffffff" opacity="0.72"/>
+    <circle cx="351" cy="652" r="18" fill="#ffffff" opacity="0.72"/>
+  </g>
+
+  <g filter="url(#softShadow)">
+    <rect x="560" y="112" width="320" height="638" rx="50" fill="#101725"/>
+    <rect x="570" y="122" width="300" height="618" rx="42" fill="url(#phoneBg)"/>
+  </g>
+  <g clip-path="url(#phoneClip2)">
+    <circle cx="626" cy="206" r="110" fill="#d5b2ff" opacity="0.42"/>
+    <circle cx="828" cy="346" r="146" fill="#70d9ff" opacity="0.38"/>
+    <circle cx="682" cy="674" r="168" fill="#adf0bb" opacity="0.46"/>
+    <rect x="596" y="162" width="248" height="76" rx="32" fill="url(#glass)" stroke="#ffffff" stroke-opacity="0.80" filter="url(#glassShadow)"/>
+    <text x="626" y="209" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="800" fill="#172336">iOS 28 style</text>
+
+    <rect x="596" y="282" width="248" height="152" rx="34" fill="url(#glass)" stroke="#ffffff" stroke-opacity="0.72" filter="url(#glassShadow)"/>
+    <text x="626" y="328" font-family="Inter, Arial, sans-serif" font-size="24" font-weight="800" fill="#142238">Future glass</text>
+    <text x="626" y="357" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="500" fill="#526278">Larger radius, lighter tint</text>
+    <rect x="626" y="384" width="104" height="38" rx="19" fill="#ffffff" opacity="0.76"/>
+    <text x="656" y="408" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="800" fill="#142238">Action</text>
+
+    <rect x="596" y="472" width="248" height="48" rx="24" fill="url(#glassDark)" stroke="#ffffff" stroke-opacity="0.62"/>
+    <rect x="617" y="492" width="138" height="8" rx="4" fill="#2f6fff"/>
+    <circle cx="755" cy="496" r="14" fill="#ffffff" filter="url(#glassShadow)"/>
+
+    <rect x="596" y="646" width="248" height="70" rx="35" fill="url(#glass)" stroke="#ffffff" stroke-opacity="0.80" filter="url(#glassShadow)"/>
+    <circle cx="658" cy="681" r="18" fill="#ffffff" opacity="0.75"/>
+    <circle cx="720" cy="681" r="20" fill="#2f6fff"/>
+    <circle cx="782" cy="681" r="18" fill="#ffffff" opacity="0.75"/>
+  </g>
+
+  <g filter="url(#softShadow)">
+    <rect x="1002" y="142" width="320" height="578" rx="34" fill="#101725"/>
+    <rect x="1012" y="152" width="300" height="558" rx="27" fill="url(#phoneBg)"/>
+  </g>
+  <g clip-path="url(#phoneClip3)">
+    <circle cx="1070" cy="244" r="118" fill="#70d9ff" opacity="0.42"/>
+    <circle cx="1290" cy="394" r="142" fill="#ffd286" opacity="0.36"/>
+    <circle cx="1144" cy="654" r="154" fill="#be9dff" opacity="0.36"/>
+    <rect x="1038" y="182" width="248" height="60" rx="22" fill="url(#glass)" stroke="#ffffff" stroke-opacity="0.58" filter="url(#glassShadow)"/>
+    <text x="1066" y="219" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="800" fill="#172336">Android UI</text>
+    <rect x="1240" y="200" width="24" height="24" rx="12" fill="#2f6fff"/>
+
+    <rect x="1038" y="284" width="248" height="112" rx="22" fill="url(#glass)" stroke="#ffffff" stroke-opacity="0.58" filter="url(#glassShadow)"/>
+    <text x="1066" y="326" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="800" fill="#142238">Material glass</text>
+    <text x="1066" y="354" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="500" fill="#526278">Native Android blur view</text>
+    <rect x="1066" y="368" width="132" height="9" rx="5" fill="#ffffff" opacity="0.60"/>
+
+    <rect x="1038" y="434" width="248" height="52" rx="20" fill="url(#glassDark)" stroke="#ffffff" stroke-opacity="0.54"/>
+    <rect x="1060" y="456" width="148" height="8" rx="4" fill="#2f6fff"/>
+    <circle cx="1208" cy="460" r="13" fill="#ffffff" filter="url(#glassShadow)"/>
+
+    <rect x="1038" y="620" width="248" height="64" rx="24" fill="url(#glass)" stroke="#ffffff" stroke-opacity="0.60" filter="url(#glassShadow)"/>
+    <rect x="1075" y="642" width="46" height="20" rx="10" fill="#2f6fff"/>
+    <rect x="1140" y="642" width="46" height="20" rx="10" fill="#ffffff" opacity="0.72"/>
+    <rect x="1205" y="642" width="46" height="20" rx="10" fill="#ffffff" opacity="0.72"/>
+  </g>
+
+  <text x="278" y="768" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="800" fill="#172336">iOS 26 preset</text>
+  <text x="720" y="768" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="800" fill="#172336">Future iOS preset</text>
+  <text x="1162" y="768" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="800" fill="#172336">Android tuned preset</text>
+</svg>
