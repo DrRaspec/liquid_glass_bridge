@@ -1,3 +1,7 @@
+## 0.3.1
+
+- Improve pub.dev discovery metadata with searchable topics, a clearer package description, and an issue tracker link.
+
 ## 0.3.0
 
 - Add iOS 26, future iOS 28, Android, and adaptive platform style presets.
