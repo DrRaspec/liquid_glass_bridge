@@ -157,6 +157,65 @@ LiquidGlassSlider(
 )
 ```
 
+### iOS 26 Water-Drop Buttons
+
+For the pill-shaped iOS 26 control style, keep the radius fully rounded and use
+low tint opacity with strong highlights:
+
+```dart
+LiquidGlassButton(
+  onPressed: () {},
+  style: const LiquidGlassStyle(
+    borderRadius: BorderRadius.all(Radius.circular(999)),
+    tintColor: Color(0xFF333333),
+    tintOpacity: 0.32,
+    blurSigma: 12,
+    borderColor: Color(0x99FFFFFF),
+    borderWidth: 1,
+    highlightStrength: 0.9,
+    noiseOpacity: 0.08,
+    elevation: 2,
+    iosBlurStyle: LiquidGlassIosBlurStyle.systemUltraThinMaterial,
+  ),
+  borderRadius: BorderRadius.circular(999),
+  padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 14),
+  child: const Text(
+    'Button',
+    style: TextStyle(color: Colors.white, fontWeight: FontWeight.w800),
+  ),
+)
+```
+
+Light variant:
+
+```dart
+LiquidGlassButton(
+  onPressed: () {},
+  style: const LiquidGlassStyle(
+    borderRadius: BorderRadius.all(Radius.circular(999)),
+    tintColor: Color(0xFFEFEFEF),
+    tintOpacity: 0.28,
+    blurSigma: 12,
+    borderColor: Color(0x80FFFFFF),
+    borderWidth: 1,
+    highlightStrength: 0.75,
+    noiseOpacity: 0.05,
+    elevation: 2,
+    iosBlurStyle: LiquidGlassIosBlurStyle.systemUltraThinMaterial,
+  ),
+  borderRadius: BorderRadius.circular(999),
+  padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 14),
+  child: const Text(
+    'Button',
+    style: TextStyle(color: Color(0xFF151515), fontWeight: FontWeight.w800),
+  ),
+)
+```
+
+Liquid glass reads best over gradients, images, maps, or layered content. On a
+flat solid background, the effect will look more like a simple translucent pill
+because there is little detail to blur or refract.
+
 ## Styles and Presets
 
 Use `LiquidGlassStyle` for reusable visual settings. When `style` or
