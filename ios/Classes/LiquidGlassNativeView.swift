@@ -22,10 +22,16 @@ final class LiquidGlassNativeViewFactory: NSObject, FlutterPlatformViewFactory {
 
 private final class GlassContentView: UIView {
   let highlightLayer = CAGradientLayer()
+  var requestedCornerRadius: CGFloat = 24.0 {
+    didSet {
+      setNeedsLayout()
+    }
+  }
 
   override init(frame: CGRect) {
     super.init(frame: frame)
     clipsToBounds = true
+    layer.cornerCurve = .continuous
     highlightLayer.startPoint = CGPoint(x: 0.0, y: 0.0)
     highlightLayer.endPoint = CGPoint(x: 1.0, y: 1.0)
     layer.addSublayer(highlightLayer)
@@ -37,6 +43,7 @@ private final class GlassContentView: UIView {
 
   override func layoutSubviews() {
     super.layoutSubviews()
+    layer.cornerRadius = min(requestedCornerRadius, min(bounds.width, bounds.height) / 2.0)
     highlightLayer.frame = bounds
   }
 }
@@ -91,7 +98,7 @@ final class LiquidGlassNativeView: NSObject, FlutterPlatformView {
       : blurStyleFromName(blurStyleName)
     effectView.effect = enabled ? UIBlurEffect(style: blurStyle) : nil
 
-    glassView.layer.cornerRadius = borderRadius
+    glassView.requestedCornerRadius = borderRadius
     glassView.layer.borderWidth = borderWidth
     glassView.layer.borderColor = borderColor.withAlphaComponent(enabled ? 0.78 : 0.65).cgColor
 

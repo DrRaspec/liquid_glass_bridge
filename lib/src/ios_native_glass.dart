@@ -117,11 +117,14 @@ class _IosNativeGlassSurfaceState extends State<IosNativeGlassSurface> {
               fit: StackFit.passthrough,
               children: <Widget>[
                 Positioned.fill(
-                  child: UiKitView(
-                    viewType: IosNativeGlassSurface._nativeViewType,
-                    layoutDirection: Directionality.of(context),
-                    creationParams: params,
-                    creationParamsCodec: const StandardMessageCodec(),
+                  // The native blur view is visual only; Flutter handles taps.
+                  child: IgnorePointer(
+                    child: UiKitView(
+                      viewType: IosNativeGlassSurface._nativeViewType,
+                      layoutDirection: Directionality.of(context),
+                      creationParams: params,
+                      creationParamsCodec: const StandardMessageCodec(),
+                    ),
                   ),
                 ),
                 Padding(padding: widget.padding, child: widget.child),

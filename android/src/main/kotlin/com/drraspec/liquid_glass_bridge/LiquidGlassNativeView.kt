@@ -64,7 +64,8 @@ class LiquidGlassNativeView(
     rootView.clipToOutline = true
     rootView.outlineProvider = object : ViewOutlineProvider() {
       override fun getOutline(view: View, outline: Outline) {
-        outline.setRoundRect(0, 0, view.width, view.height, borderRadius)
+        val clampedRadius = minOf(borderRadius, view.width / 2f, view.height / 2f)
+        outline.setRoundRect(0, 0, view.width, view.height, clampedRadius)
       }
     }
     rootView.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ ->

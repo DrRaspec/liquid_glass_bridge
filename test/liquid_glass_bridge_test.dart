@@ -33,7 +33,10 @@ void main() {
       );
 
       expect(style, LiquidGlassPresets.ios26);
-      expect(style.iosBlurStyle, LiquidGlassIosBlurStyle.systemMaterial);
+      expect(
+        style.iosBlurStyle,
+        LiquidGlassIosBlurStyle.systemUltraThinMaterial,
+      );
     });
 
     test('adaptive future resolves iOS 28 preset on iOS', () {
@@ -56,6 +59,22 @@ void main() {
       );
 
       expect(style, LiquidGlassPresets.android);
+    });
+
+    test('iOS 26 component presets use capsule geometry', () {
+      expect(
+        LiquidGlassPresets.ios26Pill.borderRadius,
+        const BorderRadius.all(Radius.circular(999)),
+      );
+      expect(
+        LiquidGlassPresets.ios26Icon.borderRadius,
+        const BorderRadius.all(Radius.circular(999)),
+      );
+      expect(LiquidGlassPresets.ios26Pill.blurSigma, greaterThanOrEqualTo(40));
+      expect(
+        LiquidGlassPresets.ios26Icon.iosBlurStyle,
+        LiquidGlassIosBlurStyle.systemUltraThinMaterial,
+      );
     });
   });
 
@@ -184,6 +203,101 @@ void main() {
 
       final Slider slider = tester.widget<Slider>(find.byType(Slider));
       expect(slider.onChanged, isNull);
+    });
+
+    testWidgets('icon button renders a circular action', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: LiquidGlassIconButton(
+              mode: LiquidGlassMode.flutterGlass,
+              icon: Icons.arrow_upward_rounded,
+              onPressed: () {},
+            ),
+          ),
+        ),
+      );
+
+      expect(find.byIcon(Icons.arrow_upward_rounded), findsOneWidget);
+      expect(find.byType(LiquidGlassIconButton), findsOneWidget);
+    });
+
+    testWidgets('icon button accepts explicit radius and padding', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: LiquidGlassIconButton(
+              mode: LiquidGlassMode.flutterGlass,
+              icon: Icons.arrow_upward_rounded,
+              style: LiquidGlassPresets.ios26Icon,
+              borderRadius: BorderRadius.circular(999),
+              padding: const EdgeInsets.all(18),
+              onPressed: () {},
+            ),
+          ),
+        ),
+      );
+
+      expect(tester.takeException(), isNull);
+      expect(find.byIcon(Icons.arrow_upward_rounded), findsOneWidget);
+    });
+
+    testWidgets('button radius overrides themed style', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: LiquidGlassTheme(
+            data: const LiquidGlassThemeData(style: LiquidGlassPresets.ios26),
+            child: Scaffold(
+              body: LiquidGlassButton(
+                mode: LiquidGlassMode.flutterGlass,
+                borderRadius: BorderRadius.circular(999),
+                onPressed: () {},
+                child: const Text('Chat'),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      final LiquidGlassSurface surface = tester.widget<LiquidGlassSurface>(
+        find.byType(LiquidGlassSurface),
+      );
+      expect(surface.borderRadius, BorderRadius.circular(999));
+    });
+
+    testWidgets('button background is tappable outside child bounds', (
+      WidgetTester tester,
+    ) async {
+      int taps = 0;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: Center(
+              child: LiquidGlassButton(
+                mode: LiquidGlassMode.flutterGlass,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 80,
+                  vertical: 24,
+                ),
+                onPressed: () => taps += 1,
+                child: const Text('Tap'),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      final Rect buttonRect = tester.getRect(find.byType(LiquidGlassButton));
+      await tester.tapAt(buttonRect.centerLeft + const Offset(18, 0));
+
+      expect(taps, 1);
     });
   });
 

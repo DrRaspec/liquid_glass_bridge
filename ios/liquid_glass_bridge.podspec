@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'liquid_glass_bridge'
-  s.version          = '0.3.2'
+  s.version          = '0.3.3'
   s.summary          = 'Native-backed liquid glass widgets and controls for Flutter.'
   s.description      = <<-DESC
 A Flutter package that renders native-backed liquid-glass surfaces and controls across iOS, Android, web, and desktop.

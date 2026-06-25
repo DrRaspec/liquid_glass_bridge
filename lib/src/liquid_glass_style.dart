@@ -267,20 +267,63 @@ class LiquidGlassPresets {
     noiseOpacity: 0.06,
   );
 
-  /// iOS 26-inspired preset for rounded, bright, system-material glass.
+  /// iOS 26-inspired preset for rounded, bright liquid glass.
   ///
   /// This stays on public UIKit material APIs in native mode, so it remains
   /// compatible when running on newer iOS versions.
   static const LiquidGlassStyle ios26 = LiquidGlassStyle(
-    borderRadius: BorderRadius.all(Radius.circular(26)),
-    elevation: 10,
-    tintOpacity: 0.18,
-    blurSigma: 20,
-    borderColor: Color(0xB3FFFFFF),
+    borderRadius: BorderRadius.all(Radius.circular(32)),
+    elevation: 8,
+    tintOpacity: 0.1,
+    blurSigma: 45,
+    borderColor: Color(0x66FFFFFF),
     borderWidth: 1,
-    highlightStrength: 0.48,
-    noiseOpacity: 0.04,
-    iosBlurStyle: LiquidGlassIosBlurStyle.systemMaterial,
+    highlightStrength: 0.78,
+    noiseOpacity: 0.08,
+    iosBlurStyle: LiquidGlassIosBlurStyle.systemUltraThinMaterial,
+  );
+
+  /// iOS 26 pill control preset for segmented controls, floating command bars,
+  /// and wide capsule buttons.
+  static const LiquidGlassStyle ios26Pill = LiquidGlassStyle(
+    borderRadius: BorderRadius.all(Radius.circular(999)),
+    elevation: 5,
+    tintOpacity: 0.08,
+    blurSigma: 45,
+    borderColor: Color(0x66FFFFFF),
+    borderWidth: 1,
+    highlightStrength: 0.86,
+    noiseOpacity: 0.08,
+    iosBlurStyle: LiquidGlassIosBlurStyle.systemUltraThinMaterial,
+  );
+
+  /// iOS 26 selected pill segment preset matching the subtle dark selected
+  /// capsule used inside glass controls.
+  static const LiquidGlassStyle ios26SelectedPill = LiquidGlassStyle(
+    borderRadius: BorderRadius.all(Radius.circular(999)),
+    elevation: 1,
+    tintColor: Color(0xFF000000),
+    tintOpacity: 0.1,
+    blurSigma: 8,
+    borderColor: Color(0x1A000000),
+    borderWidth: 0,
+    highlightStrength: 0.18,
+    noiseOpacity: 0.02,
+    iosBlurStyle: LiquidGlassIosBlurStyle.systemThinMaterial,
+  );
+
+  /// iOS 26 circular icon control preset for round toolbar buttons.
+  static const LiquidGlassStyle ios26Icon = LiquidGlassStyle(
+    borderRadius: BorderRadius.all(Radius.circular(999)),
+    elevation: 3,
+    tintColor: Color(0xFF333333),
+    tintOpacity: 0.42,
+    blurSigma: 12,
+    borderColor: Color(0x33FFFFFF),
+    borderWidth: 1,
+    highlightStrength: 0.82,
+    noiseOpacity: 0.08,
+    iosBlurStyle: LiquidGlassIosBlurStyle.systemUltraThinMaterial,
   );
 
   /// Future-leaning iOS preset for larger radii and lighter material.

@@ -75,6 +75,7 @@ allprojects {
 
 - `LiquidGlassSurface`
 - `LiquidGlassButton`
+- `LiquidGlassIconButton`
 - `LiquidGlassSegmentedControl`
 - `LiquidGlassSwitch`
 - `LiquidGlassSlider`
@@ -223,6 +224,41 @@ Use `LiquidGlassPresets.adaptive` for iOS 26-inspired glass on iOS and
 Android-tuned glass on Android. Use `LiquidGlassPresets.adaptiveFuture` to opt
 iOS into a larger-radius, lighter future-style treatment while keeping the
 Android UI tuned for Material surfaces.
+
+iOS 26 component-style presets are also included:
+
+```dart
+LiquidGlassSurface(
+  style: LiquidGlassPresets.ios26Pill,
+  child: const Text('Command bar'),
+)
+
+LiquidGlassButton(
+  style: LiquidGlassPresets.ios26Icon,
+  borderRadius: BorderRadius.circular(999),
+  padding: const EdgeInsets.all(18),
+  onPressed: () {},
+  child: const Icon(Icons.refresh),
+)
+```
+
+For circular iOS 26-style toolbar buttons, prefer the dedicated widget:
+
+```dart
+LiquidGlassIconButton(
+  icon: Icons.arrow_upward_rounded,
+  borderRadius: BorderRadius.circular(999),
+  padding: const EdgeInsets.all(18),
+  onPressed: () {},
+)
+```
+
+Every preset is just a `LiquidGlassStyle`, so you can tune `borderRadius`,
+`tintColor`, `tintOpacity`, `blurSigma`, `borderColor`, `borderWidth`,
+`highlightStrength`, `noiseOpacity`, `elevation`, and `iosBlurStyle` globally
+or per widget. If you pass `style: LiquidGlassStyle(...)`, that is a complete
+style; to keep a preset and change one value, use
+`LiquidGlassPresets.ios26Icon.copyWith(...)`.
 
 ### Button + Navigation
 

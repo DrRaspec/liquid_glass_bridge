@@ -4,6 +4,7 @@ library;
 export 'src/enums.dart';
 export 'src/liquid_glass_bottom_navigation_bar.dart';
 export 'src/liquid_glass_button.dart';
+export 'src/liquid_glass_icon_button.dart';
 export 'src/liquid_glass_navigation_bar.dart';
 export 'src/liquid_glass_segmented_control.dart';
 export 'src/liquid_glass_slider.dart';

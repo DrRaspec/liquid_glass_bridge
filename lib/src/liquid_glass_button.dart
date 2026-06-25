@@ -65,7 +65,7 @@ class LiquidGlassButton extends StatelessWidget {
     final bool isEnabled = enabled && onPressed != null;
     final bool useStyle =
         effectiveStyle != null || effectivePlatformStyle != null;
-    final LiquidGlassStyle resolvedStyle = useStyle
+    final LiquidGlassStyle baseStyle = useStyle
         ? resolveLiquidGlassStyle(
             fallback: LiquidGlassDefaults.button,
             style: effectiveStyle,
@@ -85,6 +85,42 @@ class LiquidGlassButton extends StatelessWidget {
             noiseOpacity: noiseOpacity,
             iosBlurStyle: iosBlurStyle,
           );
+    final LiquidGlassStyle resolvedStyle = useStyle
+        ? baseStyle.copyWith(
+            borderRadius:
+                borderRadius == LiquidGlassDefaults.button.borderRadius
+                ? null
+                : borderRadius,
+            elevation: elevation == LiquidGlassDefaults.button.elevation
+                ? null
+                : elevation,
+            tintColor: tintColor == LiquidGlassDefaults.button.tintColor
+                ? null
+                : tintColor,
+            tintOpacity: tintOpacity == LiquidGlassDefaults.button.tintOpacity
+                ? null
+                : tintOpacity,
+            blurSigma: blurSigma == LiquidGlassDefaults.button.blurSigma
+                ? null
+                : blurSigma,
+            borderColor: borderColor == LiquidGlassDefaults.button.borderColor
+                ? null
+                : borderColor,
+            borderWidth: borderWidth == LiquidGlassDefaults.button.borderWidth
+                ? null
+                : borderWidth,
+            highlightStrength:
+                highlightStrength ==
+                    LiquidGlassDefaults.button.highlightStrength
+                ? null
+                : highlightStrength,
+            noiseOpacity:
+                noiseOpacity == LiquidGlassDefaults.button.noiseOpacity
+                ? null
+                : noiseOpacity,
+            iosBlurStyle: iosBlurStyle,
+          )
+        : baseStyle;
     final LiquidGlassMode resolvedMode =
         (theme?.mode != null && mode == LiquidGlassMode.auto)
         ? theme!.mode!
@@ -97,6 +133,7 @@ class LiquidGlassButton extends StatelessWidget {
     return Opacity(
       opacity: isEnabled ? 1 : 0.65,
       child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
         onTap: isEnabled ? onPressed : null,
         child: LiquidGlassSurface(
           mode: resolvedMode,

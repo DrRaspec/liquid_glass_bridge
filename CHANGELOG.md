@@ -1,7 +1,13 @@
+## 0.3.3
+
+- Clamp oversized native corner radii on iOS and Android so `BorderRadius.circular(999)` renders as a true capsule instead of pointed ends.
+
 ## 0.3.2
 
 - Prevent native platform-view crashes when the host app has not registered the plugin; iOS and Android now fall back to the Flutter glass renderer instead.
 - Add native registration checks for the iOS and Android glass backends.
+- Tune the iOS 26 preset and add `ios26Pill`, `ios26SelectedPill`, and `ios26Icon` component presets.
+- Add `LiquidGlassIconButton` for circular iOS 26-style toolbar actions.
 
 ## 0.3.1
 

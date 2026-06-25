@@ -139,6 +139,11 @@ class _DemoScreenState extends State<DemoScreen> {
                       onPressed: () {},
                       child: const Text('Continue'),
                     ),
+                    LiquidGlassIconButton(
+                      icon: Icons.arrow_upward_rounded,
+                      onPressed: () {},
+                      size: 68,
+                    ),
                   ],
                 ),
                 const SizedBox(height: 12),
